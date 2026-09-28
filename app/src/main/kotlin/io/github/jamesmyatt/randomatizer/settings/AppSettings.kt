@@ -6,28 +6,21 @@ import io.github.jamesmyatt.randomatizer.dice.StandardDie
 
 enum class Mode { Basic, Advanced }
 
-/** Where the dice colors come from. The rest of the UI always uses the system (dynamic) colors. */
-enum class DiceColorMode { System, SystemInverted, Custom }
+/**
+ * The dice face color: the app's background or foreground, or a custom color.
+ * Pips, numbers and outline are derived from it. The rest of the UI always uses the system (dynamic) colors.
+ */
+enum class DiceFace { Background, Foreground, Custom }
 
 /** Light or dark app theme. System follows the device setting. */
 enum class ThemeMode { System, Light, Dark }
 
-/** User-chosen dice colors as ARGB. Face and pips must differ. */
-data class CustomDiceColors(val face: Int, val pips: Int) {
-    init {
-        require(face != pips) { "Face and pips colors must differ" }
-    }
-
-    companion object {
-        val Default = CustomDiceColors(face = 0xFFFFFFFF.toInt(), pips = 0xFF000000.toInt())
-    }
-}
-
 /** Persisted settings, including the last dice selection. Never holds roll results. */
 data class AppSettings(
     val mode: Mode = Mode.Basic,
-    val diceColorMode: DiceColorMode = DiceColorMode.System,
-    val customColors: CustomDiceColors = CustomDiceColors.Default,
+    val diceFace: DiceFace = DiceFace.Background,
+    /** Custom face color as ARGB, used when [diceFace] is [DiceFace.Custom]. */
+    val customFace: Int = DEFAULT_CUSTOM_FACE,
     val basicCount: Int = DEFAULT_BASIC_COUNT,
     val advancedSelection: AdvancedSelection = AdvancedSelection.Default,
     val selectionExpanded: Boolean = true,
@@ -59,5 +52,6 @@ data class AppSettings(
 
     companion object {
         const val DEFAULT_BASIC_COUNT = 2
+        const val DEFAULT_CUSTOM_FACE = 0xFFD32F2F.toInt()
     }
 }

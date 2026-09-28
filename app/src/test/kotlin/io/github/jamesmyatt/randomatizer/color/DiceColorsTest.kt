@@ -1,7 +1,6 @@
 package io.github.jamesmyatt.randomatizer.color
 
-import io.github.jamesmyatt.randomatizer.settings.CustomDiceColors
-import io.github.jamesmyatt.randomatizer.settings.DiceColorMode
+import io.github.jamesmyatt.randomatizer.settings.DiceFace
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -15,8 +14,10 @@ class DiceColorsTest {
     private val orange = 0xFFE65100.toInt()
     private val darkSurface = 0xFF111318.toInt()
     private val lightSurface = 0xFFF9F9FF.toInt()
-    private val navy = 0xFF0D1B2A.toInt()
-    private val darkGray = 0xFF424242.toInt()
+    private val cream = 0xFFFFF8E1.toInt()
+    private val midGray = 0xFF757575.toInt()
+    private val lightGray = 0xFFB0B0B0.toInt()
+    private val darkGray = 0xFF505050.toInt()
 
     @Test
     fun `contrast ratio matches WCAG reference values`() {
@@ -28,40 +29,46 @@ class DiceColorsTest {
     }
 
     @Test
-    fun `system dice use the background face with a foreground outline`() {
+    fun `background dice use the foreground for pips and outline`() {
         assertEquals(
             DieStyle(face = white, pips = black, outline = black),
-            dieStyle(DiceColorMode.System, CustomDiceColors.Default, white, black),
+            dieStyle(DiceFace.Background, red, background = white, foreground = black),
         )
     }
 
     @Test
-    fun `system inverted dice swap face and pips without an outline`() {
+    fun `foreground dice use the background for pips without an outline`() {
         assertEquals(
             DieStyle(face = black, pips = white, outline = null),
-            dieStyle(DiceColorMode.SystemInverted, CustomDiceColors.Default, white, black),
+            dieStyle(DiceFace.Foreground, red, background = white, foreground = black),
         )
+    }
+
+    @Test
+    fun `custom pips are whichever of foreground and background contrasts more with the face`() {
+        // Light theme.
+        assertEquals(lightSurface, dieStyle(DiceFace.Custom, red, lightSurface, darkSurface).pips)
+        assertEquals(darkSurface, dieStyle(DiceFace.Custom, cream, lightSurface, darkSurface).pips)
+        // Dark theme.
+        assertEquals(lightSurface, dieStyle(DiceFace.Custom, red, darkSurface, lightSurface).pips)
+        assertEquals(darkSurface, dieStyle(DiceFace.Custom, cream, darkSurface, lightSurface).pips)
     }
 
     @Test
     fun `custom dice get an outline in the pips color only when the face is close to the background`() {
-        val custom = CustomDiceColors(face = red, pips = orange)
-        assertEquals(orange, dieStyle(DiceColorMode.Custom, custom, darkSurface, white).outline)
-        assertNull(dieStyle(DiceColorMode.Custom, custom, lightSurface, black).outline)
+        val onDark = dieStyle(DiceFace.Custom, red, darkSurface, lightSurface)
+        assertEquals(onDark.pips, onDark.outline)
+        assertNull(dieStyle(DiceFace.Custom, red, lightSurface, darkSurface).outline)
+        val creamOnLight = dieStyle(DiceFace.Custom, cream, lightSurface, darkSurface)
+        assertEquals(darkSurface, creamOnLight.outline)
     }
 
     @Test
-    fun `warns about low face and pips contrast`() {
-        assertTrue(checkDiceColors(CustomDiceColors(red, orange), lightSurface).facePipsLow)
-        assertFalse(checkDiceColors(CustomDiceColors(red, white), lightSurface).facePipsLow)
-    }
-
-    @Test
-    fun `warns only when face and pips are both close to the background`() {
-        // Face close to the dark background but pips are not: outline only, no warning.
-        assertFalse(checkDiceColors(CustomDiceColors(red, orange), darkSurface).hardToSeeOnBackground)
-        // Both close to the dark background.
-        assertTrue(checkDiceColors(CustomDiceColors(navy, darkGray), darkSurface).hardToSeeOnBackground)
-        assertFalse(checkDiceColors(CustomDiceColors(navy, darkGray), lightSurface).hardToSeeOnBackground)
+    fun `warns about low pips contrast only when neither theme color contrasts with the face`() {
+        // With near-white and near-black theme colors, one of them always contrasts enough.
+        assertFalse(dieStyle(DiceFace.Custom, midGray, lightSurface, darkSurface).lowPipsContrast)
+        assertFalse(dieStyle(DiceFace.Custom, midGray, darkSurface, lightSurface).lowPipsContrast)
+        // A low-contrast theme cannot give the face readable pips.
+        assertTrue(dieStyle(DiceFace.Custom, midGray, background = lightGray, foreground = darkGray).lowPipsContrast)
     }
 }

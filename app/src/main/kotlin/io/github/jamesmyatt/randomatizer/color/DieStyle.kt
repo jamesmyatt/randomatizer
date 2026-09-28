@@ -1,39 +1,34 @@
 package io.github.jamesmyatt.randomatizer.color
 
-import io.github.jamesmyatt.randomatizer.settings.CustomDiceColors
-import io.github.jamesmyatt.randomatizer.settings.DiceColorMode
+import io.github.jamesmyatt.randomatizer.settings.DiceFace
 
 /** Colors (ARGB) used to draw a die. [outline] is null when the die needs no outline. */
-data class DieStyle(val face: Int, val pips: Int, val outline: Int?)
+data class DieStyle(val face: Int, val pips: Int, val outline: Int?) {
+    /** Face vs pips contrast ratio. */
+    val pipsContrast: Double get() = Contrast.ratio(face, pips)
+    val lowPipsContrast: Boolean get() = Contrast.isLow(face, pips)
+}
 
 /**
  * Resolves the die colors against the app's [background] and [foreground].
  *
- * Custom dice get an outline in the pips color when the face is too close to the background.
+ * Pips are whichever of [foreground] and [background] contrasts more with the face.
+ * The die gets an outline in the pips color when the face is too close to the background.
  */
-fun dieStyle(mode: DiceColorMode, custom: CustomDiceColors, background: Int, foreground: Int): DieStyle = when (mode) {
-    DiceColorMode.System -> DieStyle(face = background, pips = foreground, outline = foreground)
-
-    DiceColorMode.SystemInverted -> DieStyle(face = foreground, pips = background, outline = null)
-
-    DiceColorMode.Custom -> DieStyle(
-        face = custom.face,
-        pips = custom.pips,
-        outline = if (Contrast.isLow(custom.face, background)) custom.pips else null,
+fun dieStyle(face: DiceFace, customFace: Int, background: Int, foreground: Int): DieStyle {
+    val faceColor = when (face) {
+        DiceFace.Background -> background
+        DiceFace.Foreground -> foreground
+        DiceFace.Custom -> customFace
+    }
+    val pips = if (Contrast.ratio(faceColor, foreground) >= Contrast.ratio(faceColor, background)) {
+        foreground
+    } else {
+        background
+    }
+    return DieStyle(
+        face = faceColor,
+        pips = pips,
+        outline = if (Contrast.isLow(faceColor, background)) pips else null,
     )
 }
-
-/** Problems with custom dice colors on one background. */
-data class DiceColorCheck(
-    /** Face vs pips ratio. */
-    val facePipsRatio: Double,
-    /** True when both the face and the pips are too close to the background, so the die may be hard to see. */
-    val hardToSeeOnBackground: Boolean,
-) {
-    val facePipsLow: Boolean get() = facePipsRatio < Contrast.MINIMUM
-}
-
-fun checkDiceColors(custom: CustomDiceColors, background: Int): DiceColorCheck = DiceColorCheck(
-    facePipsRatio = Contrast.ratio(custom.face, custom.pips),
-    hardToSeeOnBackground = Contrast.isLow(custom.face, background) && Contrast.isLow(custom.pips, background),
-)

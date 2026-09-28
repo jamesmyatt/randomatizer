@@ -9,16 +9,8 @@ import io.github.jamesmyatt.randomatizer.dice.DiceLimits
 import io.github.jamesmyatt.randomatizer.dice.StandardDie
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertFailsWith
 
 class AppSettingsTest {
-    @Test
-    fun `face and pips must differ`() {
-        assertFailsWith<IllegalArgumentException> {
-            CustomDiceColors(face = 0xFF123456.toInt(), pips = 0xFF123456.toInt())
-        }
-    }
-
     @Test
     fun `missing preferences give defaults`() {
         assertEquals(AppSettings(), emptyPreferences().toAppSettings())
@@ -28,8 +20,8 @@ class AppSettingsTest {
     fun `settings survive a round trip`() {
         val settings = AppSettings(
             mode = Mode.Advanced,
-            diceColorMode = DiceColorMode.Custom,
-            customColors = CustomDiceColors(face = 0xFFB71C1C.toInt(), pips = 0xFFFFFFFF.toInt()),
+            diceFace = DiceFace.Custom,
+            customFace = 0xFF0D47A1.toInt(),
             basicCount = 7,
             advancedSelection = AdvancedSelection(mapOf(StandardDie.D20 to 1, StandardDie.D100 to 3)),
             selectionExpanded = false,
@@ -46,15 +38,16 @@ class AppSettingsTest {
             stringPreferencesKey("mode") to "Nonsense",
             stringPreferencesKey("theme_mode") to "Nonsense",
             intPreferencesKey("basic_count") to 99,
-            intPreferencesKey("custom_face") to 0xFF000000.toInt(),
-            intPreferencesKey("custom_pips") to 0xFF000000.toInt(),
+            stringPreferencesKey("dice_face") to "Nonsense",
+            intPreferencesKey("custom_face") to 0x80FF0000.toInt(),
             intPreferencesKey("advanced_count_d6") to 0,
         )
         val settings = prefs.toAppSettings()
         assertEquals(Mode.Basic, settings.mode)
         assertEquals(ThemeMode.System, settings.themeMode)
         assertEquals(DiceLimits.BASIC_MAX, settings.basicCount)
-        assertEquals(CustomDiceColors.Default, settings.customColors)
+        assertEquals(DiceFace.Background, settings.diceFace)
+        assertEquals(AppSettings.DEFAULT_CUSTOM_FACE, settings.customFace)
         assertEquals(AdvancedSelection.Default, settings.advancedSelection)
     }
 

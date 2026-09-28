@@ -102,8 +102,7 @@ fun RollerScreen(
     var showSettings by rememberSaveable { mutableStateOf(false) }
     val colors = MaterialTheme.colorScheme
     val settings = state.settings
-    val style =
-        dieStyle(settings.diceColorMode, settings.customColors, colors.surface.toArgb(), colors.onSurface.toArgb())
+    val style = dieStyle(settings.diceFace, settings.customFace, colors.surface.toArgb(), colors.onSurface.toArgb())
     val animated = animatedResults(state.current)
     // Hide the newest history row until its roll animation has finished.
     val history = if (animated.animating) state.history.filter { it.id != state.current?.id } else state.history

@@ -29,9 +29,8 @@ class SettingsRepository(private val dataStore: DataStore<Preferences>) {
 
 private object Keys {
     val mode = stringPreferencesKey("mode")
-    val diceColorMode = stringPreferencesKey("dice_color_mode")
+    val diceFace = stringPreferencesKey("dice_face")
     val customFace = intPreferencesKey("custom_face")
-    val customPips = intPreferencesKey("custom_pips")
     val basicCount = intPreferencesKey("basic_count")
     val selectionExpanded = booleanPreferencesKey("selection_expanded")
     val showTotal = booleanPreferencesKey("show_total")
@@ -44,17 +43,12 @@ private object Keys {
 /** Reads settings, replacing missing or invalid values with defaults. */
 internal fun Preferences.toAppSettings(): AppSettings {
     val defaults = AppSettings()
-    val face = this[Keys.customFace]
-    val pips = this[Keys.customPips]
     val hasAdvanced = Keys.advancedCounts.values.any { it in this }
     return AppSettings(
         mode = enumOrNull<Mode>(this[Keys.mode]) ?: defaults.mode,
-        diceColorMode = enumOrNull<DiceColorMode>(this[Keys.diceColorMode]) ?: defaults.diceColorMode,
-        customColors = if (face != null && pips != null && face != pips) {
-            CustomDiceColors(face, pips)
-        } else {
-            defaults.customColors
-        },
+        diceFace = enumOrNull<DiceFace>(this[Keys.diceFace]) ?: defaults.diceFace,
+        // Opaque only: the face is drawn over the background.
+        customFace = this[Keys.customFace]?.takeIf { it ushr 24 == 0xFF } ?: defaults.customFace,
         basicCount = (this[Keys.basicCount] ?: defaults.basicCount)
             .coerceIn(DiceLimits.BASIC_MIN, DiceLimits.BASIC_MAX),
         advancedSelection = if (hasAdvanced) {
@@ -70,9 +64,8 @@ internal fun Preferences.toAppSettings(): AppSettings {
 
 internal fun MutablePreferences.write(settings: AppSettings) {
     this[Keys.mode] = settings.mode.name
-    this[Keys.diceColorMode] = settings.diceColorMode.name
-    this[Keys.customFace] = settings.customColors.face
-    this[Keys.customPips] = settings.customColors.pips
+    this[Keys.diceFace] = settings.diceFace.name
+    this[Keys.customFace] = settings.customFace
     this[Keys.basicCount] = settings.basicCount
     this[Keys.selectionExpanded] = settings.selectionExpanded
     this[Keys.showTotal] = settings.showTotal

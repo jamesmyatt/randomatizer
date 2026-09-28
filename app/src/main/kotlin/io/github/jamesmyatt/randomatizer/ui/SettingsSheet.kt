@@ -57,16 +57,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import io.github.jamesmyatt.randomatizer.BuildConfig
 import io.github.jamesmyatt.randomatizer.R
-import io.github.jamesmyatt.randomatizer.color.checkDiceColors
+import io.github.jamesmyatt.randomatizer.color.DieStyle
 import io.github.jamesmyatt.randomatizer.color.dieStyle
 import io.github.jamesmyatt.randomatizer.dice.StandardDie
 import io.github.jamesmyatt.randomatizer.settings.AppSettings
-import io.github.jamesmyatt.randomatizer.settings.CustomDiceColors
-import io.github.jamesmyatt.randomatizer.settings.DiceColorMode
+import io.github.jamesmyatt.randomatizer.settings.DiceFace
 import io.github.jamesmyatt.randomatizer.settings.Mode
 import io.github.jamesmyatt.randomatizer.settings.ThemeMode
-
-private enum class ColorTarget { Face, Pips }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -100,21 +97,9 @@ internal fun SettingsContent(
             onUpdate { it.copy(showTotal = show) }
         }
         ThemeSection(settings.themeMode) { mode -> onUpdate { it.copy(themeMode = mode) } }
-        DiceColorSection(settings) { mode -> onUpdate { it.copy(diceColorMode = mode) } }
-        if (settings.diceColorMode == DiceColorMode.Custom) {
-            CustomColorsEditor(
-                custom = settings.customColors,
-                onPickFace = { argb ->
-                    onUpdate { s ->
-                        if (argb == s.customColors.pips) s else s.copy(customColors = s.customColors.copy(face = argb))
-                    }
-                },
-                onPickPips = { argb ->
-                    onUpdate { s ->
-                        if (argb == s.customColors.face) s else s.copy(customColors = s.customColors.copy(pips = argb))
-                    }
-                },
-            )
+        DiceColorSection(settings) { face -> onUpdate { it.copy(diceFace = face) } }
+        if (settings.diceFace == DiceFace.Custom) {
+            CustomFaceEditor(settings.customFace) { argb -> onUpdate { it.copy(customFace = argb) } }
         }
         Text(
             text = stringResource(R.string.about, BuildConfig.VERSION_NAME),
@@ -197,21 +182,21 @@ private fun ThemeSection(selected: ThemeMode, onSelect: (ThemeMode) -> Unit) {
 }
 
 @Composable
-private fun DiceColorSection(settings: AppSettings, onSelect: (DiceColorMode) -> Unit) {
+private fun DiceColorSection(settings: AppSettings, onSelect: (DiceFace) -> Unit) {
     val colors = MaterialTheme.colorScheme
     Column(Modifier.selectableGroup()) {
-        SectionTitle(stringResource(R.string.dice_colors))
-        DiceColorMode.entries.forEach { mode ->
-            val label = when (mode) {
-                DiceColorMode.System -> R.string.dice_colors_system
-                DiceColorMode.SystemInverted -> R.string.dice_colors_system_inverted
-                DiceColorMode.Custom -> R.string.dice_colors_custom
+        SectionTitle(stringResource(R.string.dice_color))
+        DiceFace.entries.forEach { face ->
+            val label = when (face) {
+                DiceFace.Background -> R.string.dice_color_background
+                DiceFace.Foreground -> R.string.dice_color_foreground
+                DiceFace.Custom -> R.string.dice_color_custom
             }
-            RadioRow(stringResource(label), selected = mode == settings.diceColorMode, onClick = { onSelect(mode) }) {
+            RadioRow(stringResource(label), selected = face == settings.diceFace, onClick = { onSelect(face) }) {
                 NumberDie(
                     die = StandardDie.D6,
                     value = 5,
-                    style = dieStyle(mode, settings.customColors, colors.surface.toArgb(), colors.onSurface.toArgb()),
+                    style = dieStyle(face, settings.customFace, colors.surface.toArgb(), colors.onSurface.toArgb()),
                     size = 36.dp,
                 )
             }
@@ -220,73 +205,28 @@ private fun DiceColorSection(settings: AppSettings, onSelect: (DiceColorMode) ->
 }
 
 @Composable
-private fun CustomColorsEditor(custom: CustomDiceColors, onPickFace: (Int) -> Unit, onPickPips: (Int) -> Unit) {
-    var open by rememberSaveable { mutableStateOf<ColorTarget?>(null) }
+private fun CustomFaceEditor(customFace: Int, onPick: (Int) -> Unit) {
     val context = LocalContext.current
     val light = remember(context) { dynamicLightColorScheme(context) }
     val dark = remember(context) { dynamicDarkColorScheme(context) }
+    val onLight = dieStyle(DiceFace.Custom, customFace, light.surface.toArgb(), light.onSurface.toArgb())
+    val onDark = dieStyle(DiceFace.Custom, customFace, dark.surface.toArgb(), dark.onSurface.toArgb())
 
     Column {
-        ColorRow(stringResource(R.string.face), custom.face) {
-            open =
-                if (open == ColorTarget.Face) null else ColorTarget.Face
-        }
-        if (open == ColorTarget.Face) {
-            SwatchGrid(
-                selected = custom.face,
-                unavailable = custom.pips,
-                unavailableLabel = R.string.swatch_same_as_pips,
-                onPick = onPickFace,
-            )
-        }
-        ColorRow(stringResource(R.string.pips), custom.pips) {
-            open =
-                if (open == ColorTarget.Pips) null else ColorTarget.Pips
-        }
-        if (open == ColorTarget.Pips) {
-            SwatchGrid(
-                selected = custom.pips,
-                unavailable = custom.face,
-                unavailableLabel = R.string.swatch_same_as_face,
-                onPick = onPickPips,
-            )
-        }
+        SwatchGrid(selected = customFace, onPick = onPick)
         Row(horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.padding(vertical = 10.dp)) {
-            BackgroundPreview(custom, light, stringResource(R.string.light), Modifier.weight(1f))
-            BackgroundPreview(custom, dark, stringResource(R.string.dark), Modifier.weight(1f))
+            BackgroundPreview(onLight, light, stringResource(R.string.light), Modifier.weight(1f))
+            BackgroundPreview(onDark, dark, stringResource(R.string.dark), Modifier.weight(1f))
         }
-        ColorWarnings(custom, light, dark)
+        val worst = minOf(onLight.pipsContrast, onDark.pipsContrast)
+        if (onLight.lowPipsContrast || onDark.lowPipsContrast) {
+            Warning(stringResource(R.string.warning_face_pips, "%.1f".format(worst)))
+        }
     }
 }
 
 @Composable
-private fun ColorRow(label: String, argb: Int, onClick: () -> Unit) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
-        modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).clickable(onClick = onClick),
-    ) {
-        Box(
-            Modifier
-                .size(24.dp)
-                .background(Color(argb), CircleShape)
-                .border(1.dp, MaterialTheme.colorScheme.outline, CircleShape),
-        )
-        Text(label, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
-        Text(
-            text = colorName(argb),
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-    }
-}
-
-@Composable
-private fun colorName(argb: Int): String = DicePalette.firstOrNull { it.argb == argb }?.let { stringResource(it.name) }
-    ?: "#%06X".format(argb and 0xFFFFFF)
-
-@Composable
-private fun SwatchGrid(selected: Int, unavailable: Int, unavailableLabel: Int, onPick: (Int) -> Unit) {
+private fun SwatchGrid(selected: Int, onPick: (Int) -> Unit) {
     val colors = MaterialTheme.colorScheme
     FlowRow(
         maxItemsInEachRow = 6,
@@ -296,32 +236,17 @@ private fun SwatchGrid(selected: Int, unavailable: Int, unavailableLabel: Int, o
     ) {
         DicePalette.forEach { swatch ->
             val isSelected = swatch.argb == selected
-            val isUnavailable = swatch.argb == unavailable
             val name = stringResource(swatch.name)
-            val description = if (isUnavailable) stringResource(unavailableLabel, name) else name
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier
                     .size(48.dp)
-                    .selectable(
-                        selected = isSelected,
-                        enabled = !isUnavailable,
-                        role = Role.RadioButton,
-                        onClick = { onPick(swatch.argb) },
-                    )
-                    .semantics { contentDescription = description },
+                    .selectable(selected = isSelected, role = Role.RadioButton, onClick = { onPick(swatch.argb) })
+                    .semantics { contentDescription = name },
             ) {
-                Canvas(Modifier.size(40.dp).alpha(if (isUnavailable) 0.35f else 1f)) {
+                Canvas(Modifier.size(40.dp)) {
                     drawCircle(Color(swatch.argb))
                     drawCircle(colors.outline, style = Stroke(1.dp.toPx()))
-                    if (isUnavailable) {
-                        drawLine(
-                            color = colors.onSurface,
-                            start = Offset(size.width * 0.85f, size.height * 0.15f),
-                            end = Offset(size.width * 0.15f, size.height * 0.85f),
-                            strokeWidth = 3.dp.toPx(),
-                        )
-                    }
                 }
                 if (isSelected) {
                     Box(Modifier.size(48.dp).border(3.dp, colors.onSurface, CircleShape))
@@ -332,12 +257,7 @@ private fun SwatchGrid(selected: Int, unavailable: Int, unavailableLabel: Int, o
 }
 
 @Composable
-private fun BackgroundPreview(
-    custom: CustomDiceColors,
-    scheme: ColorScheme,
-    label: String,
-    modifier: Modifier = Modifier,
-) {
+private fun BackgroundPreview(style: DieStyle, scheme: ColorScheme, label: String, modifier: Modifier = Modifier) {
     val shape = RoundedCornerShape(12.dp)
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -347,34 +267,8 @@ private fun BackgroundPreview(
             .background(scheme.surface, shape)
             .border(1.dp, MaterialTheme.colorScheme.outlineVariant, shape),
     ) {
-        NumberDie(
-            die = StandardDie.D6,
-            value = 5,
-            style = dieStyle(DiceColorMode.Custom, custom, scheme.surface.toArgb(), scheme.onSurface.toArgb()),
-            size = 40.dp,
-        )
+        NumberDie(die = StandardDie.D6, value = 5, style = style, size = 40.dp)
         Text(label, style = MaterialTheme.typography.labelMedium, color = scheme.onSurface)
-    }
-}
-
-@Composable
-private fun ColorWarnings(custom: CustomDiceColors, light: ColorScheme, dark: ColorScheme) {
-    val onLight = checkDiceColors(custom, light.surface.toArgb())
-    val onDark = checkDiceColors(custom, dark.surface.toArgb())
-    val warnings = buildList {
-        if (onLight.facePipsLow) add(stringResource(R.string.warning_face_pips, "%.1f".format(onLight.facePipsRatio)))
-        when {
-            onLight.hardToSeeOnBackground && onDark.hardToSeeOnBackground -> add(
-                stringResource(R.string.warning_hard_to_see_both),
-            )
-
-            onLight.hardToSeeOnBackground -> add(stringResource(R.string.warning_hard_to_see_light))
-
-            onDark.hardToSeeOnBackground -> add(stringResource(R.string.warning_hard_to_see_dark))
-        }
-    }
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        warnings.forEach { Warning(it) }
     }
 }
 

@@ -12,8 +12,7 @@ import io.github.jamesmyatt.randomatizer.dice.Roll
 import io.github.jamesmyatt.randomatizer.dice.StandardDie
 import io.github.jamesmyatt.randomatizer.history.HistoryEntry
 import io.github.jamesmyatt.randomatizer.settings.AppSettings
-import io.github.jamesmyatt.randomatizer.settings.CustomDiceColors
-import io.github.jamesmyatt.randomatizer.settings.DiceColorMode
+import io.github.jamesmyatt.randomatizer.settings.DiceFace
 import io.github.jamesmyatt.randomatizer.settings.Mode
 import io.github.jamesmyatt.randomatizer.settings.ThemeMode
 import io.github.jamesmyatt.randomatizer.ui.theme.RandomatizerTheme
@@ -91,9 +90,9 @@ class ScreenshotTest {
     }
 
     @Test
-    fun basicDarkInverted() = capture("basic-dark-inverted", dark = true) {
+    fun basicDarkForeground() = capture("basic-dark-foreground", dark = true) {
         Roller(
-            AppSettings(mode = Mode.Basic, basicCount = 3, diceColorMode = DiceColorMode.SystemInverted),
+            AppSettings(mode = Mode.Basic, basicCount = 3, diceFace = DiceFace.Foreground),
             basicHistory,
         )
     }
@@ -109,8 +108,7 @@ class ScreenshotTest {
             AppSettings(
                 mode = Mode.Advanced,
                 advancedSelection = advanced,
-                diceColorMode = DiceColorMode.Custom,
-                customColors = CustomDiceColors(face = 0xFFB71C1C.toInt(), pips = 0xFFFFFFFF.toInt()),
+                diceFace = DiceFace.Custom,
                 selectionExpanded = false,
                 showTotal = false,
             ),
@@ -119,12 +117,12 @@ class ScreenshotTest {
     }
 
     @Test
-    fun settingsCustomLowContrast() = capture("settings-custom-low-contrast") {
+    fun settingsCustomLemon() = capture("settings-custom-lemon") {
         Surface(color = MaterialTheme.colorScheme.surfaceContainerLow) {
             SettingsContent(
                 settings = AppSettings(
-                    diceColorMode = DiceColorMode.Custom,
-                    customColors = CustomDiceColors(face = 0xFFB71C1C.toInt(), pips = 0xFFE65100.toInt()),
+                    diceFace = DiceFace.Custom,
+                    customFace = 0xFFFFF59D.toInt(),
                     themeMode = ThemeMode.Dark,
                 ),
                 onUpdate = {},
