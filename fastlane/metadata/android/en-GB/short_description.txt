@@ -1,0 +1,1 @@
+Offline dice roller for board games. Free, open source, no ads, no tracking.

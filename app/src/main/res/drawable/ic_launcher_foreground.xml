@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- A die showing five, with the pips cut out. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path
+        android:fillColor="#000000"
+        android:fillType="evenOdd"
+        android:pathData="M42,32H66A10,10 0,0 1,76 42V66A10,10 0,0 1,66 76H42A10,10 0,0 1,32 66V42A10,10 0,0 1,42 32Z
+            M38,42.5a4.5,4.5 0,1 0,9 0a4.5,4.5 0,1 0,-9 0Z
+            M61,42.5a4.5,4.5 0,1 0,9 0a4.5,4.5 0,1 0,-9 0Z
+            M49.5,54a4.5,4.5 0,1 0,9 0a4.5,4.5 0,1 0,-9 0Z
+            M38,65.5a4.5,4.5 0,1 0,9 0a4.5,4.5 0,1 0,-9 0Z
+            M61,65.5a4.5,4.5 0,1 0,9 0a4.5,4.5 0,1 0,-9 0Z" />
+</vector>

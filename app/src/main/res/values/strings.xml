@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">Randomatizer</string>
+    <string name="settings">Settings</string>
+
+    <!-- Main screen -->
+    <string name="dice">Dice</string>
+    <string name="expanded">Expanded</string>
+    <string name="collapsed">Collapsed</string>
+    <string name="fewer_dice">Fewer dice</string>
+    <string name="more_dice">More dice</string>
+    <string name="remove_die">Remove %1$s</string>
+    <string name="add_die">Add %1$s</string>
+    <string name="ready_to_roll">Ready to roll</string>
+    <string name="die_showing">%1$s showing %2$d</string>
+    <string name="total">Total</string>
+    <string name="roll">Roll</string>
+    <plurals name="roll_dice">
+        <item quantity="one">Roll %d die</item>
+        <item quantity="other">Roll %d dice</item>
+    </plurals>
+    <string name="history">History</string>
+    <string name="clear">Clear</string>
+
+    <!-- Settings -->
+    <string name="mode">Mode</string>
+    <string name="mode_basic">Basic</string>
+    <string name="mode_advanced">Advanced</string>
+    <string name="dice_colours">Dice colours</string>
+    <string name="dice_colours_system">System</string>
+    <string name="dice_colours_system_inverted">System inverted</string>
+    <string name="dice_colours_custom">Custom</string>
+    <string name="face">Face</string>
+    <string name="pips">Pips and numbers</string>
+    <string name="light">Light</string>
+    <string name="dark">Dark</string>
+    <string name="swatch_same_as_face">%1$s, unavailable: same as face</string>
+    <string name="swatch_same_as_pips">%1$s, unavailable: same as pips</string>
+    <string name="warning_face_pips">Low contrast between face and pips (%1$s:1). Pips and numbers may be hard to read. Aim for at least 3:1.</string>
+    <string name="warning_hard_to_see_light">Dice may be hard to see against the light background.</string>
+    <string name="warning_hard_to_see_dark">Dice may be hard to see against the dark background.</string>
+    <string name="warning_hard_to_see_both">Dice may be hard to see against the light and dark backgrounds.</string>
+    <string name="about">Randomatizer %1$s · Apache-2.0</string>
+
+    <!-- Palette -->
+    <string name="colour_black">Black</string>
+    <string name="colour_white">White</string>
+    <string name="colour_dark_grey">Dark grey</string>
+    <string name="colour_light_grey">Light grey</string>
+    <string name="colour_navy">Navy</string>
+    <string name="colour_cream">Cream</string>
+    <string name="colour_red">Red</string>
+    <string name="colour_orange">Orange</string>
+    <string name="colour_green">Green</string>
+    <string name="colour_teal">Teal</string>
+    <string name="colour_blue">Blue</string>
+    <string name="colour_purple">Purple</string>
+</resources>

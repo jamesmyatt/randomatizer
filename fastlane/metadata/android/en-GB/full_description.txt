@@ -1,0 +1,15 @@
+Randomatizer is a simple dice roller for board games.
+
+<b>Modes</b>
+<ul>
+<li>Basic: roll one to ten six-sided dice, shown with pips.</li>
+<li>Advanced: roll any mix of d4, d6, d8, d10, d12, d20 and d100, shown as numbers.</li>
+</ul>
+
+Each roll shows every result and the total. A history of this session's rolls is kept in memory only and is never saved.
+
+<b>Colours</b>
+The app follows your system colours and light or dark mode. Dice can use the system colours, the system colours inverted, or your own choice, with a warning when the contrast is too low.
+
+<b>Privacy</b>
+No internet permission, no ads, no tracking and no Google Play Services. Rolls use a cryptographically secure random number generator.
