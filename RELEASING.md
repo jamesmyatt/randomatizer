@@ -6,7 +6,11 @@ Releases are published to GitHub Releases by `.github/workflows/release.yml` whe
 
 Generate a keystore once and keep it safe. Losing it means users cannot update to future releases.
 
-`keytool` comes with the JDK (in its `bin/` directory). If you don't have JDK 21, install [Eclipse Temurin 21](https://adoptium.net/temurin/releases/?version=21).
+`keytool` is in Android Studio's bundled JDK:
+
+- Windows: `C:\Program Files\Android\Android Studio\jbr\bin\keytool.exe`
+- macOS: `/Applications/Android Studio.app/Contents/jbr/Contents/Home/bin/keytool`
+- Linux: `<android-studio>/jbr/bin/keytool`
 
 ```sh
 keytool -genkeypair -v -keystore randomatizer-release.jks -alias randomatizer \
