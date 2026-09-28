@@ -50,7 +50,7 @@ minSdk 31, targetSdk 37, compileSdk 37.2. AGP built-in Kotlin with the Compose c
 ## Versioning
 
 - Semantic versioning: `versionName` is `MAJOR.MINOR.PATCH`, set in `gradle.properties` (`appVersionMajor`, `appVersionMinor`, `appVersionPatch`). `versionCode = MAJOR * 10000 + MINOR * 100 + PATCH`, so MINOR and PATCH stay in 0..99.
-- Bump MAJOR for big or incompatible changes (e.g. settings reset, a feature removed), MINOR for new features or visible behavior changes, PATCH for fixes, docs or build-only changes. Reset the lower parts to 0.
+- Most code changes bump MAJOR and reset MINOR and PATCH to 0. Bump MINOR only for small additions or tweaks that don't change existing behavior (e.g. a new palette color, a new setting defaulting to current behavior), and PATCH only for small fixes, docs or build-only changes. Reset the lower parts to 0.
 - Bump the version at most once per branch/PR, relative to the base branch. If the branch already bumps it, don't bump again for further commits; just update that version's changelog (use the largest bump any change on the branch needs).
 - Every version bump adds `fastlane/metadata/android/en-US/changelogs/<versionCode>.txt`. These files are the only changelog: they feed GitHub Release notes and F-Droid. Don't add a separate `CHANGELOG.md`.
 
