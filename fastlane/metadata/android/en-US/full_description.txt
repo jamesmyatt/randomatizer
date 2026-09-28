@@ -1,8 +1,12 @@
 Minimalist, flat dice roller for board games.
 
 <ul>
+<li>2 modes:
+<ul>
 <li><b>Basic</b>: 1–10 six-sided dice, shown as pips.</li>
 <li><b>Advanced</b>: up to 10 each of d4, d6, d8, d10, d12, d20 and d100, shown as numbers.</li>
+</ul>
+</li>
 <li>Results and optional total.</li>
 <li>Session history, never saved.</li>
 <li>System colors and light/dark mode. Customizable dice colors with contrast warnings.</li>
