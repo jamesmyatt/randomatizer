@@ -22,9 +22,9 @@ class SettingsRepository(private val dataStore: DataStore<Preferences>) {
         .catch { if (it is IOException) emit(emptyPreferences()) else throw it }
         .map { it.toAppSettings() }
 
-    suspend fun update(transform: (AppSettings) -> AppSettings) {
-        dataStore.edit { prefs -> prefs.write(transform(prefs.toAppSettings())) }
-    }
+    /** Applies [transform] and returns the settings as saved. */
+    suspend fun update(transform: (AppSettings) -> AppSettings): AppSettings =
+        dataStore.edit { prefs -> prefs.write(transform(prefs.toAppSettings())) }.toAppSettings()
 }
 
 private object Keys {
@@ -35,6 +35,7 @@ private object Keys {
     val selectionExpanded = booleanPreferencesKey("selection_expanded")
     val historyExpanded = booleanPreferencesKey("history_expanded")
     val showTotal = booleanPreferencesKey("show_total")
+    val historyEnabled = booleanPreferencesKey("history_enabled")
     val themeMode = stringPreferencesKey("theme_mode")
     val advancedCounts = StandardDie.entries.associateWith {
         intPreferencesKey("advanced_count_${it.name.lowercase()}")
@@ -60,6 +61,7 @@ internal fun Preferences.toAppSettings(): AppSettings {
         selectionExpanded = this[Keys.selectionExpanded] ?: defaults.selectionExpanded,
         historyExpanded = this[Keys.historyExpanded] ?: defaults.historyExpanded,
         showTotal = this[Keys.showTotal] ?: defaults.showTotal,
+        historyEnabled = this[Keys.historyEnabled] ?: defaults.historyEnabled,
         themeMode = enumOrNull<ThemeMode>(this[Keys.themeMode]) ?: defaults.themeMode,
     )
 }
@@ -72,6 +74,7 @@ internal fun MutablePreferences.write(settings: AppSettings) {
     this[Keys.selectionExpanded] = settings.selectionExpanded
     this[Keys.historyExpanded] = settings.historyExpanded
     this[Keys.showTotal] = settings.showTotal
+    this[Keys.historyEnabled] = settings.historyEnabled
     this[Keys.themeMode] = settings.themeMode.name
     Keys.advancedCounts.forEach { (die, key) -> this[key] = settings.advancedSelection.count(die) }
 }

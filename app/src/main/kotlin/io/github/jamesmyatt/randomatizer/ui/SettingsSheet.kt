@@ -99,6 +99,9 @@ internal fun SettingsContent(
         SwitchRow(stringResource(R.string.show_total), settings.showTotal) { show ->
             onUpdate { it.copy(showTotal = show) }
         }
+        SwitchRow(stringResource(R.string.keep_history), settings.historyEnabled) { keep ->
+            onUpdate { it.copy(historyEnabled = keep) }
+        }
         ThemeRow(settings.themeMode) { mode -> onUpdate { it.copy(themeMode = mode) } }
         DiceColorSection(settings) { face -> onUpdate { it.copy(diceFace = face) } }
         if (settings.diceFace == DiceFace.Custom) {

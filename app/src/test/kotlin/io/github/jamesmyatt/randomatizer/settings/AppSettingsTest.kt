@@ -27,6 +27,7 @@ class AppSettingsTest {
             selectionExpanded = false,
             historyExpanded = false,
             showTotal = false,
+            historyEnabled = false,
             themeMode = ThemeMode.Dark,
         )
         val prefs = mutablePreferencesOf().apply { write(settings) }

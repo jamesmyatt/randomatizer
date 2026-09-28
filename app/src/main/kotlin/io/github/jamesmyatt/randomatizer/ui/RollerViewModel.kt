@@ -41,7 +41,8 @@ class RollerViewModel(private val settingsRepository: SettingsRepository, privat
 
     /** Null until settings have loaded. */
     val uiState: StateFlow<RollerUiState?> = combine(settingsRepository.settings, session) { settings, session ->
-        RollerUiState(settings, session.current, session.history.entries)
+        val history = if (settings.historyEnabled) session.history.entries else emptyList()
+        RollerUiState(settings, session.current, history)
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
 
     fun roll() {
@@ -53,7 +54,8 @@ class RollerViewModel(private val settingsRepository: SettingsRepository, privat
         val roll = roller.roll(dice)
         session.update {
             val entry = HistoryEntry(it.nextId, roll, settings.mode)
-            it.copy(current = entry, history = it.history + entry, nextId = it.nextId + 1)
+            val history = if (settings.historyEnabled) it.history + entry else it.history.cleared()
+            it.copy(current = entry, history = history, nextId = it.nextId + 1)
         }
     }
 
@@ -62,7 +64,10 @@ class RollerViewModel(private val settingsRepository: SettingsRepository, privat
     }
 
     fun updateSettings(transform: (AppSettings) -> AppSettings) {
-        viewModelScope.launch { settingsRepository.update(transform) }
+        viewModelScope.launch {
+            // Turning history off discards what is already there.
+            if (!settingsRepository.update(transform).historyEnabled) clearHistory()
+        }
     }
 
     companion object {

@@ -27,6 +27,8 @@ data class AppSettings(
     val historyExpanded: Boolean = true,
     /** Show the total on the main screen and in the history. */
     val showTotal: Boolean = true,
+    /** Keep a session history of rolls. When off, the history is discarded and no rolls are added. */
+    val historyEnabled: Boolean = true,
     val themeMode: ThemeMode = ThemeMode.System,
 ) {
     init {

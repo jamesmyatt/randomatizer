@@ -18,7 +18,7 @@ Download the APK from [GitHub Releases](https://github.com/jamesmyatt/randomatiz
   - **Basic**: 1–12 d6, shown as pips.
   - **Advanced**: up to 12 each of d4, d6, d8, d10, d12, d20 and d100, shown as numbers.
 - Results and optional total. No modifiers.
-- Collapsible session history, never saved.
+- Optional, collapsible session history, never saved.
 - Minimalist, flat, monochrome design.
 - System colors. Light, dark or system theme. Custom dice colors, with pips that always contrast.
 
