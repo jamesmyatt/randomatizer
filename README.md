@@ -2,6 +2,12 @@
 
 Offline dice roller for board games on Android. Free, open source (Apache-2.0), ad-free and tracking-free.
 
+## Install
+
+Download the APK from [GitHub Releases](https://github.com/jamesmyatt/randomatizer/releases), or get automatic updates with [Obtainium](https://obtainium.imranr.dev/):
+
+[Add to Obtainium](https://apps.obtainium.imranr.dev/redirect?r=obtainium://add/https://github.com/jamesmyatt/randomatizer)
+
 ## Features
 
 - **Basic mode**: 1–10 d6, shown as pips.
