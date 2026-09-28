@@ -23,6 +23,7 @@ minSdk 31, targetSdk 37, compileSdk 37.2. AGP built-in Kotlin with the Compose c
 - `color/`: WCAG contrast and `dieStyle` rules.
 - `settings/`: `AppSettings` and the DataStore `SettingsRepository`.
 - `ui/`: `RollerViewModel`, `RollerScreen`, `SettingsSheet`, dice drawing, palette, theme.
+- App icon: red die, five white pips (`res/drawable/ic_launcher_foreground.xml`, `ic_launcher_monochrome.xml`). `docs/icon.svg` and `docs/icon-themed.svg` copy it for the README; change them together.
 
 ## UI rules
 

@@ -1,4 +1,4 @@
-# Randomatizer
+# <img src="docs/icon.svg" alt="" width="40"> Randomatizer
 
 [![CI](https://github.com/jamesmyatt/randomatizer/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/jamesmyatt/randomatizer/actions/workflows/ci.yml?query=branch%3Amain)
 
