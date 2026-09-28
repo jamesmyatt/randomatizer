@@ -52,7 +52,9 @@ Windows (PowerShell):
 
 ### 3. Add repository secrets
 
-Settings → Secrets and variables → Actions:
+In the repository: **Settings → Secrets and variables → Actions → Secrets** tab → **New repository secret**. Add each one below.
+
+Use **repository secrets**, the kind GitHub Actions reads. Environment secrets, variables, and Codespaces or Dependabot secrets won't work: the release workflow doesn't use an environment, and variables aren't secret.
 
 | Secret | Value |
 |---|---|
