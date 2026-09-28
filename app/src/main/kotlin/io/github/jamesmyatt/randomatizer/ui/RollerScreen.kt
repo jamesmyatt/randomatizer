@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -468,7 +469,13 @@ private fun HistoryPanel(
     Column {
         HistoryHeader(expanded, onToggle, onClear)
         if (expanded) {
-            LazyColumn(Modifier.weight(1f)) {
+            val listState = rememberLazyListState()
+            LazyColumn(
+                state = listState,
+                modifier = Modifier
+                    .weight(1f)
+                    .verticalScrollIndicator(listState, MaterialTheme.colorScheme.outline),
+            ) {
                 itemsIndexed(history, key = { _, entry -> entry.id }) { index, entry ->
                     HistoryRow(entry, isLatest = index == 0, showTotal = showTotal)
                 }

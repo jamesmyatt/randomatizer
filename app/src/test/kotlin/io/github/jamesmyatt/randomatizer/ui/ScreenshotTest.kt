@@ -90,6 +90,14 @@ class ScreenshotTest {
     }
 
     @Test
+    fun basicLongHistory() = capture("basic-long-history") {
+        val history = (30L downTo 1L).map { id ->
+            entry(id, Mode.Basic, *List(3) { i -> StandardDie.D6 to ((id + i) % 6 + 1).toInt() }.toTypedArray())
+        }
+        Roller(AppSettings(mode = Mode.Basic, basicCount = 3), history)
+    }
+
+    @Test
     fun basicHistoryCollapsed() = capture("basic-history-collapsed") {
         Roller(AppSettings(mode = Mode.Basic, basicCount = 3, historyExpanded = false), basicHistory)
     }
