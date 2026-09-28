@@ -15,7 +15,7 @@ Download the APK from [GitHub Releases](https://github.com/jamesmyatt/randomatiz
 - Results and optional total. No modifiers.
 - Session history, never saved.
 - Minimalist, flat, monochrome design.
-- System colours and light/dark mode. Dice colours: system, inverted or custom, with contrast checks.
+- System colours and light/dark mode. Customisable dice colours with contrast warnings.
 
 ## Principles
 

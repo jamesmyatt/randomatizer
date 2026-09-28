@@ -5,7 +5,7 @@ Minimalist, flat dice roller for board games.
 <li><b>Advanced</b>: up to 10 each of d4, d6, d8, d10, d12, d20 and d100, shown as numbers.</li>
 <li>Results and optional total.</li>
 <li>Session history, never saved.</li>
-<li>System colours and light/dark mode. Dice colours: system, inverted or custom, with contrast checks.</li>
+<li>System colours and light/dark mode. Customisable dice colours with contrast warnings.</li>
 </ul>
 
 <b>Private, open and fair</b>: no internet permission, no ads, no tracking, no Google Play Services. Rolls use a secure random number generator.
