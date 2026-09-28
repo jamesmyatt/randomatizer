@@ -372,17 +372,23 @@ private fun DiceArea(mode: Mode?, results: List<DieResult>?, style: DieStyle) {
 
 @Composable
 private fun Total(results: List<DieResult>?) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterHorizontally),
+        modifier = Modifier.fillMaxWidth(),
+    ) {
         Text(
             text = stringResource(R.string.total),
-            style = MaterialTheme.typography.bodyMedium,
+            style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.alignByBaseline(),
         )
         Text(
             text = results?.sumOf { it.value }?.toString() ?: "–",
-            style = MaterialTheme.typography.displayMedium,
+            style = MaterialTheme.typography.displaySmall,
             fontWeight = FontWeight.SemiBold,
-            modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite },
+            modifier = Modifier
+                .alignByBaseline()
+                .semantics { liveRegion = LiveRegionMode.Polite },
         )
     }
 }
