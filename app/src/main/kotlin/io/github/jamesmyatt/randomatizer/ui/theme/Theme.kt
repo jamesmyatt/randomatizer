@@ -7,7 +7,7 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 
-/** Always uses the system dynamic colours (available from API 31) and follows system light/dark mode. */
+/** Always uses the system dynamic colors (available from API 31) and follows system light/dark mode. */
 @Composable
 fun RandomatizerTheme(content: @Composable () -> Unit) {
     val context = LocalContext.current

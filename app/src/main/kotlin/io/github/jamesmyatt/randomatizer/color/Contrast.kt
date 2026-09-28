@@ -1,8 +1,8 @@
-package io.github.jamesmyatt.randomatizer.colour
+package io.github.jamesmyatt.randomatizer.color
 
 import kotlin.math.pow
 
-/** WCAG 2 contrast helpers for opaque ARGB colours. */
+/** WCAG 2 contrast helpers for opaque ARGB colors. */
 object Contrast {
     /** Minimum ratio for graphical objects and large text (WCAG 1.4.11 / 1.4.3). */
     const val MINIMUM = 3.0

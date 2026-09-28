@@ -30,7 +30,7 @@ jobs:
             echo "::error::Tag $GITHUB_REF_NAME does not match versionName $version in gradle.properties (expected v$version)"
             exit 1
           fi
-          changelog="fastlane/metadata/android/en-GB/changelogs/$code.txt"
+          changelog="fastlane/metadata/android/en-US/changelogs/$code.txt"
           if [ ! -f "$changelog" ]; then
             echo "::error::Missing changelog $changelog"
             exit 1

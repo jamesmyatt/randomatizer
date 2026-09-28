@@ -24,7 +24,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.sp
 import io.github.jamesmyatt.randomatizer.R
-import io.github.jamesmyatt.randomatizer.colour.DieStyle
+import io.github.jamesmyatt.randomatizer.color.DieStyle
 import io.github.jamesmyatt.randomatizer.dice.StandardDie
 
 private const val CORNER_FRACTION = 0.19f
@@ -35,7 +35,7 @@ private const val LOW = 0.28f
 private const val MID = 0.5f
 private const val HIGH = 0.72f
 
-/** Pip centres as fractions of the die size, by face value. */
+/** Pip centers as fractions of the die size, by face value. */
 private val PIPS = mapOf(
     1 to listOf(MID to MID),
     2 to listOf(LOW to LOW, HIGH to HIGH),

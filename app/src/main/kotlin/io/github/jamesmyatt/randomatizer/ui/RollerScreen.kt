@@ -60,8 +60,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.jamesmyatt.randomatizer.R
-import io.github.jamesmyatt.randomatizer.colour.DieStyle
-import io.github.jamesmyatt.randomatizer.colour.dieStyle
+import io.github.jamesmyatt.randomatizer.color.DieStyle
+import io.github.jamesmyatt.randomatizer.color.dieStyle
 import io.github.jamesmyatt.randomatizer.dice.DiceLimits
 import io.github.jamesmyatt.randomatizer.dice.DieResult
 import io.github.jamesmyatt.randomatizer.dice.StandardDie
@@ -97,15 +97,15 @@ fun RollerScreen(
     onUpdateSettings: ((AppSettings) -> AppSettings) -> Unit,
 ) {
     var showSettings by rememberSaveable { mutableStateOf(false) }
-    val colours = MaterialTheme.colorScheme
+    val colors = MaterialTheme.colorScheme
     val settings = state.settings
-    val style = dieStyle(settings.diceColourMode, settings.customColours, colours.surface.toArgb(), colours.onSurface.toArgb())
+    val style = dieStyle(settings.diceColorMode, settings.customColors, colors.surface.toArgb(), colors.onSurface.toArgb())
     val animated = animatedResults(state.current)
     // Hide the newest history row until its roll animation has finished.
     val history = if (animated.animating) state.history.filter { it.id != state.current?.id } else state.history
 
     Scaffold(
-        containerColor = colours.surface,
+        containerColor = colors.surface,
         topBar = {
             TopAppBar(
                 title = { Text(stringResource(R.string.app_name)) },
@@ -376,14 +376,14 @@ private fun Total(results: List<DieResult>?) {
 
 @Composable
 private fun RollButton(settings: AppSettings, onRoll: () -> Unit) {
-    val colours = MaterialTheme.colorScheme
+    val colors = MaterialTheme.colorScheme
     val label = when (settings.mode) {
         Mode.Basic -> stringResource(R.string.roll)
         Mode.Advanced -> settings.advancedSelection.total.let { pluralStringResource(R.plurals.roll_dice, it, it) }
     }
     Button(
         onClick = onRoll,
-        colors = ButtonDefaults.buttonColors(containerColor = colours.onSurface, contentColor = colours.surface),
+        colors = ButtonDefaults.buttonColors(containerColor = colors.onSurface, contentColor = colors.surface),
         modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 20.dp).height(56.dp),
     ) {
         Text(label, style = MaterialTheme.typography.titleMedium)
@@ -415,14 +415,14 @@ private fun HistoryHeader(onClear: () -> Unit) {
 
 @Composable
 private fun HistoryRow(entry: HistoryEntry, isLatest: Boolean, showTotal: Boolean) {
-    val colour = if (isLatest) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant
+    val color = if (isLatest) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant
     Row(
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 6.dp),
     ) {
-        Text(entry.describe(), color = colour, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
+        Text(entry.describe(), color = color, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
         if (showTotal) {
-            Text(entry.roll.total.toString(), color = colour, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold)
+            Text(entry.roll.total.toString(), color = color, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold)
         }
     }
 }

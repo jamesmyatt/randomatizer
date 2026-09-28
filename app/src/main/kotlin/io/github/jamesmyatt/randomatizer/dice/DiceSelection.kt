@@ -36,7 +36,7 @@ data class AdvancedSelection(val counts: Map<StandardDie, Int>) {
         val Default = AdvancedSelection(mapOf(StandardDie.D6 to 2))
 
         /** Clamps [counts] into range, falling back to [Default] if nothing is selected. */
-        fun sanitised(counts: Map<StandardDie, Int>): AdvancedSelection {
+        fun sanitized(counts: Map<StandardDie, Int>): AdvancedSelection {
             val clamped = StandardDie.entries.associateWith { (counts[it] ?: 0).coerceIn(0, DiceLimits.ADVANCED_MAX_PER_DIE) }
                 .filterValues { it > 0 }
             return if (clamped.isEmpty()) Default else AdvancedSelection(clamped)

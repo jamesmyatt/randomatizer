@@ -40,11 +40,11 @@ class AdvancedSelectionTest {
     }
 
     @Test
-    fun `sanitised clamps counts and falls back to the default when empty`() {
+    fun `sanitized clamps counts and falls back to the default when empty`() {
         assertEquals(
             AdvancedSelection(mapOf(StandardDie.D4 to DiceLimits.ADVANCED_MAX_PER_DIE)),
-            AdvancedSelection.sanitised(mapOf(StandardDie.D4 to 99, StandardDie.D6 to -3)),
+            AdvancedSelection.sanitized(mapOf(StandardDie.D4 to 99, StandardDie.D6 to -3)),
         )
-        assertEquals(AdvancedSelection.Default, AdvancedSelection.sanitised(emptyMap()))
+        assertEquals(AdvancedSelection.Default, AdvancedSelection.sanitized(emptyMap()))
     }
 }

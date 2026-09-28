@@ -5,25 +5,25 @@ import io.github.jamesmyatt.randomatizer.dice.DiceLimits
 
 enum class Mode { Basic, Advanced }
 
-/** Where the dice colours come from. The rest of the UI always uses the system (dynamic) colours. */
-enum class DiceColourMode { System, SystemInverted, Custom }
+/** Where the dice colors come from. The rest of the UI always uses the system (dynamic) colors. */
+enum class DiceColorMode { System, SystemInverted, Custom }
 
-/** User-chosen dice colours as ARGB. Face and pips must differ. */
-data class CustomDiceColours(val face: Int, val pips: Int) {
+/** User-chosen dice colors as ARGB. Face and pips must differ. */
+data class CustomDiceColors(val face: Int, val pips: Int) {
     init {
-        require(face != pips) { "Face and pips colours must differ" }
+        require(face != pips) { "Face and pips colors must differ" }
     }
 
     companion object {
-        val Default = CustomDiceColours(face = 0xFFFFFFFF.toInt(), pips = 0xFF000000.toInt())
+        val Default = CustomDiceColors(face = 0xFFFFFFFF.toInt(), pips = 0xFF000000.toInt())
     }
 }
 
 /** Persisted settings, including the last dice selection. Never holds roll results. */
 data class AppSettings(
     val mode: Mode = Mode.Basic,
-    val diceColourMode: DiceColourMode = DiceColourMode.System,
-    val customColours: CustomDiceColours = CustomDiceColours.Default,
+    val diceColorMode: DiceColorMode = DiceColorMode.System,
+    val customColors: CustomDiceColors = CustomDiceColors.Default,
     val basicCount: Int = DEFAULT_BASIC_COUNT,
     val advancedSelection: AdvancedSelection = AdvancedSelection.Default,
     val selectionExpanded: Boolean = true,

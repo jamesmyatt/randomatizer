@@ -14,7 +14,7 @@ import kotlin.test.assertFailsWith
 class AppSettingsTest {
     @Test
     fun `face and pips must differ`() {
-        assertFailsWith<IllegalArgumentException> { CustomDiceColours(face = 0xFF123456.toInt(), pips = 0xFF123456.toInt()) }
+        assertFailsWith<IllegalArgumentException> { CustomDiceColors(face = 0xFF123456.toInt(), pips = 0xFF123456.toInt()) }
     }
 
     @Test
@@ -26,8 +26,8 @@ class AppSettingsTest {
     fun `settings survive a round trip`() {
         val settings = AppSettings(
             mode = Mode.Advanced,
-            diceColourMode = DiceColourMode.Custom,
-            customColours = CustomDiceColours(face = 0xFFB71C1C.toInt(), pips = 0xFFFFFFFF.toInt()),
+            diceColorMode = DiceColorMode.Custom,
+            customColors = CustomDiceColors(face = 0xFFB71C1C.toInt(), pips = 0xFFFFFFFF.toInt()),
             basicCount = 7,
             advancedSelection = AdvancedSelection(mapOf(StandardDie.D20 to 1, StandardDie.D100 to 3)),
             selectionExpanded = false,
@@ -49,7 +49,7 @@ class AppSettingsTest {
         val settings = prefs.toAppSettings()
         assertEquals(Mode.Basic, settings.mode)
         assertEquals(DiceLimits.BASIC_MAX, settings.basicCount)
-        assertEquals(CustomDiceColours.Default, settings.customColours)
+        assertEquals(CustomDiceColors.Default, settings.customColors)
         assertEquals(AdvancedSelection.Default, settings.advancedSelection)
     }
 }

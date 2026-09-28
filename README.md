@@ -15,7 +15,7 @@ Download the APK from [GitHub Releases](https://github.com/jamesmyatt/randomatiz
 - Results and optional total. No modifiers.
 - Session history, never saved.
 - Minimalist, flat, monochrome design.
-- System colours and light/dark mode. Customisable dice colours with contrast warnings.
+- System colors and light/dark mode. Customizable dice colors with contrast warnings.
 
 ## Principles
 
@@ -60,13 +60,13 @@ Then delete the `.b64` file and store the `.jks` and passwords somewhere safe ou
 
 ### Each release
 
-1. Make sure `gradle.properties` has the right version and `fastlane/metadata/android/en-GB/changelogs/<versionCode>.txt` exists. The changelog becomes the release notes.
+1. Make sure `gradle.properties` has the right version and `fastlane/metadata/android/en-US/changelogs/<versionCode>.txt` exists. The changelog becomes the release notes.
 2. Tag and push: `git tag v1.0 && git push origin v1.0`.
 
 The workflow fails if the tag doesn't match the version, the changelog is missing, a secret is missing, or the build, tests or lint fail. It attaches `randomatizer-<version>.apk` and its SHA-256 checksum to the release.
 
 To sign a release locally, set `RANDOMATIZER_KEYSTORE_FILE`, `RANDOMATIZER_KEYSTORE_PASSWORD`, `RANDOMATIZER_KEY_ALIAS` and `RANDOMATIZER_KEY_PASSWORD`, then run `./gradlew assembleRelease`. Without them the release APK is unsigned.
 
-## Licence
+## License
 
 Apache-2.0. See [LICENSE](LICENSE).
