@@ -1,1 +1,9 @@
 First release.
+
+- Basic mode: 1–12 six-sided dice, shown as pips.
+- Advanced mode: up to 12 each of d4, d6, d8, d10, d12, d20 and d100.
+- Results with an optional total.
+- Optional session history, never saved.
+- Light, dark or system theme.
+- Custom dice colors.
+- Works offline. No permissions, ads or tracking.
