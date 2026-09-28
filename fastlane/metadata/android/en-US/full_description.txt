@@ -9,7 +9,7 @@ Minimalist, flat dice roller for board games.
 </li>
 <li>Results and optional total.</li>
 <li>Session history, never saved.</li>
-<li>System colors and light/dark mode. Customizable dice colors with contrast warnings.</li>
+<li>System colors. Light, dark or system theme. Customizable dice colors with contrast warnings.</li>
 </ul>
 
 <b>Private, open and fair</b>: no internet permission, no ads, no tracking, no Google Play Services. Rolls use a secure random number generator.

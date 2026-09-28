@@ -9,6 +9,9 @@ enum class Mode { Basic, Advanced }
 /** Where the dice colors come from. The rest of the UI always uses the system (dynamic) colors. */
 enum class DiceColorMode { System, SystemInverted, Custom }
 
+/** Light or dark app theme. System follows the device setting. */
+enum class ThemeMode { System, Light, Dark }
+
 /** User-chosen dice colors as ARGB. Face and pips must differ. */
 data class CustomDiceColors(val face: Int, val pips: Int) {
     init {
@@ -30,6 +33,7 @@ data class AppSettings(
     val selectionExpanded: Boolean = true,
     /** Show the total on the main screen and in the history. */
     val showTotal: Boolean = true,
+    val themeMode: ThemeMode = ThemeMode.System,
 ) {
     init {
         require(basicCount in DiceLimits.BASIC_MIN..DiceLimits.BASIC_MAX) { "Basic count out of range: $basicCount" }

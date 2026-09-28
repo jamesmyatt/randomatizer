@@ -7,7 +7,7 @@ Offline, ad-free, tracking-free dice roller for Android. Apache-2.0. F-Droid com
 - No `INTERNET` (or any network) permission. `verify<Variant>Permissions` fails the build if the merged manifest has it. Never disable or weaken that task.
 - No Google Play Services, Firebase, analytics or proprietary dependencies. Add dependencies only via `gradle/libs.versions.toml`, and only if FOSS.
 - Roll history lives in memory only (`RollerViewModel`). Never persist it: no files, DataStore, Room, `SavedStateHandle` or `rememberSaveable`.
-- Only settings (mode, show total, dice colors, last dice selection, panel expanded) may be persisted, via `SettingsRepository` (DataStore).
+- Only settings (mode, show total, theme, dice colors, last dice selection, panel expanded) may be persisted, via `SettingsRepository` (DataStore).
 - All roll randomness goes through `RandomSource` / `DiceRoller`. Never use `%` to map random numbers to a range; use `nextInt(bound)`. The roll animation's random faces are cosmetic and use `kotlin.random.Random`.
 - `dice/`, `history/`, `color/` and `settings/AppSettings.kt` must not import Android classes, so they stay unit-testable on the JVM.
 
@@ -26,7 +26,7 @@ minSdk 31, targetSdk 37, compileSdk 37.2. AGP built-in Kotlin with the Compose c
 
 ## UI rules
 
-- The app UI always uses the system dynamic color scheme and follows system light/dark mode. It is monochrome: accents use `onSurface`/`surface`, not `primary`.
+- The app UI always uses the system dynamic color scheme. Theme setting: System, Light or Dark, applied with `UiModeManager.setApplicationNightMode` so the system starts the app in the right mode. It is monochrome: accents use `onSurface`/`surface`, not `primary`.
 - Mode is an "Advanced mode" switch in Settings. Switching carries the dice over (`AppSettings.withMode`): Basic → Advanced keeps the same d6s; Advanced → Basic keeps the number of dice, up to 10.
 - Die size depends only on the number of dice (`dieSize` in `ui/DieSize.kt`): fill the available width in one row, clamped to 56–168 dp, so 4d6 looks the same in both modes.
 - Dice colors: System (face `surface`, pips and outline `onSurface`), System inverted (face `onSurface`, pips `surface`) or Custom.

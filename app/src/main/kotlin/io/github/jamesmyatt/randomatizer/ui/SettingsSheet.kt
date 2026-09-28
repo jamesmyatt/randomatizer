@@ -64,6 +64,7 @@ import io.github.jamesmyatt.randomatizer.settings.AppSettings
 import io.github.jamesmyatt.randomatizer.settings.CustomDiceColors
 import io.github.jamesmyatt.randomatizer.settings.DiceColorMode
 import io.github.jamesmyatt.randomatizer.settings.Mode
+import io.github.jamesmyatt.randomatizer.settings.ThemeMode
 
 private enum class ColorTarget { Face, Pips }
 
@@ -98,6 +99,7 @@ internal fun SettingsContent(
         SwitchRow(stringResource(R.string.show_total), settings.showTotal) { show ->
             onUpdate { it.copy(showTotal = show) }
         }
+        ThemeSection(settings.themeMode) { mode -> onUpdate { it.copy(themeMode = mode) } }
         DiceColorSection(settings) { mode -> onUpdate { it.copy(diceColorMode = mode) } }
         if (settings.diceColorMode == DiceColorMode.Custom) {
             CustomColorsEditor(
@@ -157,35 +159,55 @@ private fun SwitchRow(label: String, checked: Boolean, onChange: (Boolean) -> Un
 }
 
 @Composable
+private fun RadioRow(label: String, selected: Boolean, onClick: () -> Unit, trailing: @Composable () -> Unit = {}) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(52.dp)
+            .selectable(selected = selected, onClick = onClick, role = Role.RadioButton),
+    ) {
+        RadioButton(
+            selected = selected,
+            onClick = null,
+            colors = RadioButtonDefaults.colors(selectedColor = MaterialTheme.colorScheme.onSurface),
+        )
+        Text(
+            text = label,
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier.padding(start = 14.dp).weight(1f),
+        )
+        trailing()
+    }
+}
+
+@Composable
+private fun ThemeSection(selected: ThemeMode, onSelect: (ThemeMode) -> Unit) {
+    Column(Modifier.selectableGroup()) {
+        SectionTitle(stringResource(R.string.theme))
+        ThemeMode.entries.forEach { mode ->
+            val label = when (mode) {
+                ThemeMode.System -> R.string.theme_system
+                ThemeMode.Light -> R.string.light
+                ThemeMode.Dark -> R.string.dark
+            }
+            RadioRow(stringResource(label), selected = mode == selected, onClick = { onSelect(mode) })
+        }
+    }
+}
+
+@Composable
 private fun DiceColorSection(settings: AppSettings, onSelect: (DiceColorMode) -> Unit) {
     val colors = MaterialTheme.colorScheme
     Column(Modifier.selectableGroup()) {
         SectionTitle(stringResource(R.string.dice_colors))
         DiceColorMode.entries.forEach { mode ->
-            val selected = mode == settings.diceColorMode
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(52.dp)
-                    .selectable(selected = selected, onClick = { onSelect(mode) }, role = Role.RadioButton),
-            ) {
-                RadioButton(
-                    selected = selected,
-                    onClick = null,
-                    colors = RadioButtonDefaults.colors(selectedColor = colors.onSurface),
-                )
-                Text(
-                    text = stringResource(
-                        when (mode) {
-                            DiceColorMode.System -> R.string.dice_colors_system
-                            DiceColorMode.SystemInverted -> R.string.dice_colors_system_inverted
-                            DiceColorMode.Custom -> R.string.dice_colors_custom
-                        },
-                    ),
-                    style = MaterialTheme.typography.bodyLarge,
-                    modifier = Modifier.padding(start = 14.dp).weight(1f),
-                )
+            val label = when (mode) {
+                DiceColorMode.System -> R.string.dice_colors_system
+                DiceColorMode.SystemInverted -> R.string.dice_colors_system_inverted
+                DiceColorMode.Custom -> R.string.dice_colors_custom
+            }
+            RadioRow(stringResource(label), selected = mode == settings.diceColorMode, onClick = { onSelect(mode) }) {
                 NumberDie(
                     die = StandardDie.D6,
                     value = 5,

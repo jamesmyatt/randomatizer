@@ -25,6 +25,8 @@
     <!-- Settings -->
     <string name="advanced_mode">Advanced mode</string>
     <string name="show_total">Show total</string>
+    <string name="theme">Theme</string>
+    <string name="theme_system">System</string>
     <string name="dice_colors">Dice colors</string>
     <string name="dice_colors_system">System</string>
     <string name="dice_colors_system_inverted">System inverted</string>

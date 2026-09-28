@@ -15,6 +15,7 @@ import io.github.jamesmyatt.randomatizer.settings.AppSettings
 import io.github.jamesmyatt.randomatizer.settings.CustomDiceColors
 import io.github.jamesmyatt.randomatizer.settings.DiceColorMode
 import io.github.jamesmyatt.randomatizer.settings.Mode
+import io.github.jamesmyatt.randomatizer.settings.ThemeMode
 import io.github.jamesmyatt.randomatizer.ui.theme.RandomatizerTheme
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -124,6 +125,7 @@ class ScreenshotTest {
                 settings = AppSettings(
                     diceColorMode = DiceColorMode.Custom,
                     customColors = CustomDiceColors(face = 0xFFB71C1C.toInt(), pips = 0xFFE65100.toInt()),
+                    themeMode = ThemeMode.Dark,
                 ),
                 onUpdate = {},
             )

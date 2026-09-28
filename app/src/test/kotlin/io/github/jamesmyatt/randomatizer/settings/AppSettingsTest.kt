@@ -34,6 +34,7 @@ class AppSettingsTest {
             advancedSelection = AdvancedSelection(mapOf(StandardDie.D20 to 1, StandardDie.D100 to 3)),
             selectionExpanded = false,
             showTotal = false,
+            themeMode = ThemeMode.Dark,
         )
         val prefs = mutablePreferencesOf().apply { write(settings) }
         assertEquals(settings, prefs.toAppSettings())
@@ -43,6 +44,7 @@ class AppSettingsTest {
     fun `invalid stored values fall back to safe values`() {
         val prefs = mutablePreferencesOf(
             stringPreferencesKey("mode") to "Nonsense",
+            stringPreferencesKey("theme_mode") to "Nonsense",
             intPreferencesKey("basic_count") to 99,
             intPreferencesKey("custom_face") to 0xFF000000.toInt(),
             intPreferencesKey("custom_pips") to 0xFF000000.toInt(),
@@ -50,6 +52,7 @@ class AppSettingsTest {
         )
         val settings = prefs.toAppSettings()
         assertEquals(Mode.Basic, settings.mode)
+        assertEquals(ThemeMode.System, settings.themeMode)
         assertEquals(DiceLimits.BASIC_MAX, settings.basicCount)
         assertEquals(CustomDiceColors.Default, settings.customColors)
         assertEquals(AdvancedSelection.Default, settings.advancedSelection)

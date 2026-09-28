@@ -69,6 +69,7 @@ import io.github.jamesmyatt.randomatizer.history.HistoryEntry
 import io.github.jamesmyatt.randomatizer.history.describe
 import io.github.jamesmyatt.randomatizer.settings.AppSettings
 import io.github.jamesmyatt.randomatizer.settings.Mode
+import io.github.jamesmyatt.randomatizer.ui.theme.ApplyThemeMode
 import kotlinx.coroutines.delay
 import kotlin.random.Random
 
@@ -78,6 +79,7 @@ private const val ROLL_FRAME_MS = 40L
 @Composable
 fun RollerRoute(viewModel: RollerViewModel = viewModel(factory = RollerViewModel.Factory)) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    ApplyThemeMode(state?.settings?.themeMode)
     state?.let {
         RollerScreen(
             state = it,
