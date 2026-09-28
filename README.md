@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/jamesmyatt/randomatizer/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/jamesmyatt/randomatizer/actions/workflows/ci.yml?query=branch%3Amain)
 
-Minimalist offline private open-source dice roller.
+Minimalist offline private open-source dice roller for Android.
 
 ## Install
 
