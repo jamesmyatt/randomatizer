@@ -32,10 +32,13 @@ android {
     signingConfigs {
         if (releaseKeystore.isPresent) {
             create("release") {
+                val keystorePassword = providers.environmentVariable("RANDOMATIZER_KEYSTORE_PASSWORD").get()
                 storeFile = file(releaseKeystore.get())
-                storePassword = providers.environmentVariable("RANDOMATIZER_KEYSTORE_PASSWORD").get()
+                storePassword = keystorePassword
                 keyAlias = providers.environmentVariable("RANDOMATIZER_KEY_ALIAS").get()
-                keyPassword = providers.environmentVariable("RANDOMATIZER_KEY_PASSWORD").get()
+                // PKCS12 keystores (keytool's default) use the keystore password for the key too.
+                keyPassword = providers.environmentVariable("RANDOMATIZER_KEY_PASSWORD").orNull
+                    ?.takeIf { it.isNotEmpty() } ?: keystorePassword
             }
         }
     }

@@ -10,7 +10,7 @@ Work in a private folder outside any Git checkout, e.g. `~/keys/randomatizer`. Y
 
 ### 1. Create the keystore
 
-`keytool` is in Android Studio's bundled JDK. It prompts for passwords and your name.
+`keytool` is in Android Studio's bundled JDK. It prompts for a keystore password and your name.
 
 Linux (adjust the Android Studio path):
 
@@ -59,7 +59,7 @@ Settings → Secrets and variables → Actions:
 | `RELEASE_KEYSTORE_BASE64` | Contents of `randomatizer-release.jks.b64` |
 | `RELEASE_KEYSTORE_PASSWORD` | Keystore password |
 | `RELEASE_KEY_ALIAS` | `randomatizer` |
-| `RELEASE_KEY_PASSWORD` | Key password |
+| `RELEASE_KEY_PASSWORD` | Optional. Only for a key with its own password; keytool's default keystores don't have one. |
 
 ### 4. Clean up and back up
 
@@ -72,4 +72,4 @@ Delete the `.b64` file. Back up the `.jks` file and both passwords, e.g. in a pa
 
 The workflow fails if the tag doesn't match the version, the changelog is missing, a secret is missing, or the build, tests or lint fail. It attaches `randomatizer-<version>.apk` and its SHA-256 checksum to the release.
 
-To sign a release locally, set `RANDOMATIZER_KEYSTORE_FILE`, `RANDOMATIZER_KEYSTORE_PASSWORD`, `RANDOMATIZER_KEY_ALIAS` and `RANDOMATIZER_KEY_PASSWORD`, then run `./gradlew assembleRelease`. Without them the release APK is unsigned.
+To sign a release locally, set `RANDOMATIZER_KEYSTORE_FILE`, `RANDOMATIZER_KEYSTORE_PASSWORD` and `RANDOMATIZER_KEY_ALIAS` (and `RANDOMATIZER_KEY_PASSWORD` if the key has its own password), then run `./gradlew assembleRelease`. Without them the release APK is unsigned.
