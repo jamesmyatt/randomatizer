@@ -18,7 +18,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -72,8 +72,8 @@ import io.github.jamesmyatt.randomatizer.settings.Mode
 import kotlinx.coroutines.delay
 import kotlin.random.Random
 
-private const val ROLL_FRAMES = 8
-private const val ROLL_FRAME_MS = 50L
+private const val ROLL_FRAMES = 7
+private const val ROLL_FRAME_MS = 40L
 
 @Composable
 fun RollerRoute(viewModel: RollerViewModel = viewModel(factory = RollerViewModel.Factory)) {
@@ -132,8 +132,8 @@ fun RollerScreen(
             item { RollButton(settings, onRoll) }
             if (history.isNotEmpty()) {
                 item { HistoryHeader(onClearHistory) }
-                items(history, key = { it.id }) { entry ->
-                    HistoryRow(entry, isLatest = entry.id == state.current?.id, showTotal = settings.showTotal)
+                itemsIndexed(history, key = { _, entry -> entry.id }) { index, entry ->
+                    HistoryRow(entry, isLatest = index == 0, showTotal = settings.showTotal)
                 }
             }
         }
@@ -152,22 +152,23 @@ private fun animatedResults(entry: HistoryEntry?): AnimatedResults {
     val animationsEnabled = animationsEnabled()
     // Saveable so a configuration change does not replay the animation.
     var lastAnimatedId by rememberSaveable { mutableLongStateOf(entry?.id ?: -1L) }
-    var shown by remember { mutableStateOf(AnimatedResults(entry?.roll?.results, animating = false)) }
+    // Decided during composition, not in the effect, so the first frame of a new roll is already animating.
+    val animating = entry != null && animationsEnabled && entry.id != lastAnimatedId
+    var faces by remember(entry?.id) { mutableStateOf(entry?.let(::randomFaces)) }
     LaunchedEffect(entry?.id) {
-        if (entry != null && animationsEnabled && entry.id != lastAnimatedId) {
+        if (entry != null && animating) {
             repeat(ROLL_FRAMES) {
-                shown = AnimatedResults(
-                    entry.roll.results.map { DieResult(it.die, Random.nextInt(1, it.die.sides + 1)) },
-                    animating = true,
-                )
+                faces = randomFaces(entry)
                 delay(ROLL_FRAME_MS)
             }
         }
         lastAnimatedId = entry?.id ?: -1L
-        shown = AnimatedResults(entry?.roll?.results, animating = false)
     }
-    return shown
+    return if (animating) AnimatedResults(faces, animating = true) else AnimatedResults(entry?.roll?.results, false)
 }
+
+private fun randomFaces(entry: HistoryEntry): List<DieResult> =
+    entry.roll.results.map { DieResult(it.die, Random.nextInt(1, it.die.sides + 1)) }
 
 @Composable
 private fun animationsEnabled(): Boolean {
@@ -446,7 +447,6 @@ private fun HistoryRow(entry: HistoryEntry, isLatest: Boolean, showTotal: Boolea
                 entry.roll.total.toString(),
                 color = color,
                 style = MaterialTheme.typography.bodyLarge,
-                fontWeight = FontWeight.SemiBold,
             )
         }
     }
