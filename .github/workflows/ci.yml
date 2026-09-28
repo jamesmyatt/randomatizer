@@ -7,6 +7,12 @@ on:
 permissions:
   contents: read
 
+# One run at a time per branch/PR. A newer commit replaces any run still queued;
+# the run already in progress finishes.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.head_ref || github.ref }}
+  cancel-in-progress: false
+
 jobs:
   build:
     runs-on: ubuntu-latest
