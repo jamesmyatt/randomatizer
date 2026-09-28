@@ -3,8 +3,8 @@ package io.github.jamesmyatt.randomatizer.dice
 /** Limits on how many dice can be selected. */
 object DiceLimits {
     const val BASIC_MIN = 1
-    const val BASIC_MAX = 10
-    const val ADVANCED_MAX_PER_DIE = 10
+    const val BASIC_MAX = 12
+    const val ADVANCED_MAX_PER_DIE = 12
 }
 
 /** Number of each [StandardDie] to roll in Advanced mode. Always holds at least one die. */

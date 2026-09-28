@@ -63,7 +63,7 @@ class AppSettingsTest {
     fun `advanced to basic keeps the number of dice up to the basic maximum`() {
         val mixed = AdvancedSelection(mapOf(StandardDie.D4 to 1, StandardDie.D20 to 2))
         assertEquals(3, AppSettings(mode = Mode.Advanced, advancedSelection = mixed).withMode(Mode.Basic).basicCount)
-        val many = AdvancedSelection(mapOf(StandardDie.D6 to 10, StandardDie.D8 to 5))
+        val many = AdvancedSelection(mapOf(StandardDie.D6 to 12, StandardDie.D8 to 5))
         assertEquals(
             DiceLimits.BASIC_MAX,
             AppSettings(mode = Mode.Advanced, advancedSelection = many).withMode(Mode.Basic).basicCount,

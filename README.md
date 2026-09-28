@@ -15,8 +15,8 @@ Download the APK from [GitHub Releases](https://github.com/jamesmyatt/randomatiz
 ## Features
 
 - 2 modes:
-  - **Basic**: 1–10 d6, shown as pips.
-  - **Advanced**: up to 10 each of d4, d6, d8, d10, d12, d20 and d100, shown as numbers.
+  - **Basic**: 1–12 d6, shown as pips.
+  - **Advanced**: up to 12 each of d4, d6, d8, d10, d12, d20 and d100, shown as numbers.
 - Results and optional total. No modifiers.
 - Collapsible session history, never saved.
 - Minimalist, flat, monochrome design.

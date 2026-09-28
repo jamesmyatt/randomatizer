@@ -376,7 +376,7 @@ private fun DiceArea(mode: Mode?, results: List<DieResult>?, style: DieStyle) {
                         NumberDie(result.die, result.value, style, size)
                         Text(
                             text = result.die.label,
-                            style = MaterialTheme.typography.labelMedium,
+                            style = MaterialTheme.typography.labelLarge,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                     }

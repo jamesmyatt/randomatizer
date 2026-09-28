@@ -8,7 +8,7 @@ import kotlin.math.floor
 internal val DIE_SPACING = 16.dp
 
 /** Smallest die: about 5 across a typical phone (~412 dp wide). More dice wrap onto further rows. */
-internal val MIN_DIE_SIZE = 56.dp
+internal val MIN_DIE_SIZE = 78.dp
 
 /** Largest die: about 2 across a typical phone. */
 internal val MAX_DIE_SIZE = 168.dp

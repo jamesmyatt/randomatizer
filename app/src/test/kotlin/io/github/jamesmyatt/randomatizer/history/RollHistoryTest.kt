@@ -54,6 +54,6 @@ class RollHistoryTest {
             DieResult(StandardDie.D8, 7),
             DieResult(StandardDie.D6, 5),
         )
-        assertEquals("2d6 3 5 · d8 7 · d20 14", e.describe())
+        assertEquals("[2d6] 3 5 · [d8] 7 · [d20] 14", e.describe())
     }
 }
