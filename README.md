@@ -38,6 +38,8 @@ Requires JDK 21 and the Android SDK (`ANDROID_HOME` or `local.properties`).
 ./gradlew assembleDebug testDebugUnitTest
 ```
 
+To publish a release, see [RELEASING.md](RELEASING.md).
+
 ## License
 
 Apache-2.0. See [LICENSE](LICENSE).
