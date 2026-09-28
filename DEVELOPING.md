@@ -15,7 +15,7 @@ The project needs JDK 21. If Android Studio bundles a different version, update 
 ## Ways to work
 
 - **Android Studio**: edit, preview Compose screens, run on an emulator or a USB-connected phone (Run ▶).
-- **Claude Code in the cloud**: no local install. Changes are built and tested by CI; test on your phone with the CI debug APK (below).
+- **Remote, CI only**: no local install. Edit in the browser or with a cloud coding agent; CI builds and tests each push. Test on your phone with the CI debug APK (below).
 - **Command line**: any editor, `./gradlew`, and `adb install` to a USB-connected phone. No Compose previews.
 
 ## Testing on a phone
