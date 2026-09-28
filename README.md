@@ -38,6 +38,8 @@ Open the project in [Android Studio](https://developer.android.com/studio), whic
 ./gradlew assembleDebug testDebugUnitTest
 ```
 
+Each CI run keeps a debug APK for 14 days (under Artifacts on the run's page). It installs alongside the release app as "Randomatizer debug".
+
 To publish a release, see [RELEASING.md](RELEASING.md).
 
 ## License
