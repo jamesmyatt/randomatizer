@@ -13,7 +13,9 @@ data class DieStyle(val face: Int, val pips: Int, val outline: Int?)
  */
 fun dieStyle(mode: DiceColorMode, custom: CustomDiceColors, background: Int, foreground: Int): DieStyle = when (mode) {
     DiceColorMode.System -> DieStyle(face = background, pips = foreground, outline = foreground)
+
     DiceColorMode.SystemInverted -> DieStyle(face = foreground, pips = background, outline = null)
+
     DiceColorMode.Custom -> DieStyle(
         face = custom.face,
         pips = custom.pips,

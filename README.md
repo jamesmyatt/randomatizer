@@ -32,7 +32,7 @@ See [GitHub Releases](https://github.com/jamesmyatt/randomatizer/releases).
 
 ## Development
 
-See [DEVELOPING.md](DEVELOPING.md). To publish a release, see [RELEASING.md](RELEASING.md).
+See [DEVELOPING.md](DEVELOPING.md) and [CONTRIBUTING.md](CONTRIBUTING.md). To publish a release, see [RELEASING.md](RELEASING.md).
 
 ## License
 

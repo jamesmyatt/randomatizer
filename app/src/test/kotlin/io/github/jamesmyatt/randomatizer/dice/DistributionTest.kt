@@ -7,7 +7,8 @@ import kotlin.test.assertTrue
 
 /** Chi-squared goodness-of-fit checks that each die is uniform. Seeded, so deterministic. */
 class DistributionTest {
-    private fun chiSquared(counts: IntArray, expected: Double): Double = counts.sumOf { (it - expected).pow(2) / expected }
+    private fun chiSquared(counts: IntArray, expected: Double): Double =
+        counts.sumOf { (it - expected).pow(2) / expected }
 
     /** Wilson–Hilferty approximation of the chi-squared critical value at p = 0.001. */
     private fun criticalValue(degreesOfFreedom: Int): Double {

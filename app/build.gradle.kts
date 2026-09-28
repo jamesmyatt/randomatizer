@@ -4,6 +4,7 @@ import javax.xml.parsers.DocumentBuilderFactory
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.roborazzi)
 }
 
 val appVersionMajor = providers.gradleProperty("appVersionMajor").get().toInt()
@@ -58,6 +59,25 @@ android {
         compose = true
     }
 
+    testOptions {
+        // Robolectric screenshot tests need the app's resources.
+        unitTests.isIncludeAndroidResources = true
+        // Robolectric's Android 16+ sandboxes need access to JDK internals on JDK 21.
+        unitTests.all {
+            it.jvmArgs(
+                "--add-exports=java.base/jdk.internal.access=ALL-UNNAMED",
+                "--add-opens=java.base/java.io=ALL-UNNAMED",
+            )
+        }
+    }
+
+    lint {
+        warningsAsErrors = true
+        abortOnError = true
+        // Dependency versions are kept current by Renovate, not lint.
+        disable += setOf("GradleDependency", "NewerVersionAvailable", "AndroidGradlePluginVersion")
+    }
+
     // F-Droid rejects the Google-encrypted dependency metadata block.
     dependenciesInfo {
         includeInApk = false
@@ -83,6 +103,12 @@ dependencies {
 
     testImplementation(libs.junit)
     testImplementation(libs.kotlin.test.junit)
+    testImplementation(platform(libs.androidx.compose.bom))
+    testImplementation(libs.androidx.compose.ui.test.junit4)
+    testImplementation(libs.robolectric)
+    testImplementation(libs.roborazzi)
+    testImplementation(libs.roborazzi.compose)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
 }
 
 /** Fails the build if the merged manifest requests any forbidden permission. */

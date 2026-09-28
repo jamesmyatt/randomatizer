@@ -72,44 +72,54 @@ private enum class ColorTarget { Face, Pips }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsSheet(
-    settings: AppSettings,
-    onUpdate: ((AppSettings) -> AppSettings) -> Unit,
-    onDismiss: () -> Unit,
-) {
+fun SettingsSheet(settings: AppSettings, onUpdate: ((AppSettings) -> AppSettings) -> Unit, onDismiss: () -> Unit) {
     ModalBottomSheet(
         onDismissRequest = onDismiss,
         sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
     ) {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            modifier = Modifier
-                .verticalScroll(rememberScrollState())
-                .padding(start = 24.dp, end = 24.dp, bottom = 24.dp),
-        ) {
-            Text(stringResource(R.string.settings), style = MaterialTheme.typography.headlineSmall)
-            ModeSection(settings.mode) { mode -> onUpdate { it.copy(mode = mode) } }
-            ShowTotalRow(settings.showTotal) { show -> onUpdate { it.copy(showTotal = show) } }
-            DiceColorSection(settings) { mode -> onUpdate { it.copy(diceColorMode = mode) } }
-            if (settings.diceColorMode == DiceColorMode.Custom) {
-                CustomColorsEditor(
-                    custom = settings.customColors,
-                    onPickFace = { argb ->
-                        onUpdate { s -> if (argb == s.customColors.pips) s else s.copy(customColors = s.customColors.copy(face = argb)) }
-                    },
-                    onPickPips = { argb ->
-                        onUpdate { s -> if (argb == s.customColors.face) s else s.copy(customColors = s.customColors.copy(pips = argb)) }
-                    },
-                )
-            }
-            Text(
-                text = stringResource(R.string.about, BuildConfig.VERSION_NAME),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth(),
+        SettingsContent(settings, onUpdate)
+    }
+}
+
+/** The settings sheet's contents, separate from the sheet so screenshot tests can render it. */
+@Composable
+internal fun SettingsContent(
+    settings: AppSettings,
+    onUpdate: ((AppSettings) -> AppSettings) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        modifier = modifier
+            .verticalScroll(rememberScrollState())
+            .padding(start = 24.dp, end = 24.dp, bottom = 24.dp),
+    ) {
+        Text(stringResource(R.string.settings), style = MaterialTheme.typography.headlineSmall)
+        ModeSection(settings.mode) { mode -> onUpdate { it.copy(mode = mode) } }
+        ShowTotalRow(settings.showTotal) { show -> onUpdate { it.copy(showTotal = show) } }
+        DiceColorSection(settings) { mode -> onUpdate { it.copy(diceColorMode = mode) } }
+        if (settings.diceColorMode == DiceColorMode.Custom) {
+            CustomColorsEditor(
+                custom = settings.customColors,
+                onPickFace = { argb ->
+                    onUpdate { s ->
+                        if (argb == s.customColors.pips) s else s.copy(customColors = s.customColors.copy(face = argb))
+                    }
+                },
+                onPickPips = { argb ->
+                    onUpdate { s ->
+                        if (argb == s.customColors.face) s else s.copy(customColors = s.customColors.copy(pips = argb))
+                    }
+                },
             )
         }
+        Text(
+            text = stringResource(R.string.about, BuildConfig.VERSION_NAME),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth(),
+        )
     }
 }
 
@@ -153,7 +163,11 @@ private fun ShowTotalRow(checked: Boolean, onChange: (Boolean) -> Unit) {
             .heightIn(min = 48.dp)
             .toggleable(value = checked, onValueChange = onChange, role = Role.Switch),
     ) {
-        Text(stringResource(R.string.show_total), style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
+        Text(
+            stringResource(R.string.show_total),
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier.weight(1f),
+        )
         Switch(
             checked = checked,
             onCheckedChange = null,
@@ -215,13 +229,29 @@ private fun CustomColorsEditor(custom: CustomDiceColors, onPickFace: (Int) -> Un
     val dark = remember(context) { dynamicDarkColorScheme(context) }
 
     Column {
-        ColorRow(stringResource(R.string.face), custom.face) { open = if (open == ColorTarget.Face) null else ColorTarget.Face }
-        if (open == ColorTarget.Face) {
-            SwatchGrid(selected = custom.face, unavailable = custom.pips, unavailableLabel = R.string.swatch_same_as_pips, onPick = onPickFace)
+        ColorRow(stringResource(R.string.face), custom.face) {
+            open =
+                if (open == ColorTarget.Face) null else ColorTarget.Face
         }
-        ColorRow(stringResource(R.string.pips), custom.pips) { open = if (open == ColorTarget.Pips) null else ColorTarget.Pips }
+        if (open == ColorTarget.Face) {
+            SwatchGrid(
+                selected = custom.face,
+                unavailable = custom.pips,
+                unavailableLabel = R.string.swatch_same_as_pips,
+                onPick = onPickFace,
+            )
+        }
+        ColorRow(stringResource(R.string.pips), custom.pips) {
+            open =
+                if (open == ColorTarget.Pips) null else ColorTarget.Pips
+        }
         if (open == ColorTarget.Pips) {
-            SwatchGrid(selected = custom.pips, unavailable = custom.face, unavailableLabel = R.string.swatch_same_as_face, onPick = onPickPips)
+            SwatchGrid(
+                selected = custom.pips,
+                unavailable = custom.face,
+                unavailableLabel = R.string.swatch_same_as_face,
+                onPick = onPickPips,
+            )
         }
         Row(horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.padding(vertical = 10.dp)) {
             BackgroundPreview(custom, light, stringResource(R.string.light), Modifier.weight(1f))
@@ -254,9 +284,8 @@ private fun ColorRow(label: String, argb: Int, onClick: () -> Unit) {
 }
 
 @Composable
-private fun colorName(argb: Int): String =
-    DicePalette.firstOrNull { it.argb == argb }?.let { stringResource(it.name) }
-        ?: "#%06X".format(argb and 0xFFFFFF)
+private fun colorName(argb: Int): String = DicePalette.firstOrNull { it.argb == argb }?.let { stringResource(it.name) }
+    ?: "#%06X".format(argb and 0xFFFFFF)
 
 @Composable
 private fun SwatchGrid(selected: Int, unavailable: Int, unavailableLabel: Int, onPick: (Int) -> Unit) {
@@ -305,7 +334,12 @@ private fun SwatchGrid(selected: Int, unavailable: Int, unavailableLabel: Int, o
 }
 
 @Composable
-private fun BackgroundPreview(custom: CustomDiceColors, scheme: ColorScheme, label: String, modifier: Modifier = Modifier) {
+private fun BackgroundPreview(
+    custom: CustomDiceColors,
+    scheme: ColorScheme,
+    label: String,
+    modifier: Modifier = Modifier,
+) {
     val shape = RoundedCornerShape(12.dp)
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -332,8 +366,12 @@ private fun ColorWarnings(custom: CustomDiceColors, light: ColorScheme, dark: Co
     val warnings = buildList {
         if (onLight.facePipsLow) add(stringResource(R.string.warning_face_pips, "%.1f".format(onLight.facePipsRatio)))
         when {
-            onLight.hardToSeeOnBackground && onDark.hardToSeeOnBackground -> add(stringResource(R.string.warning_hard_to_see_both))
+            onLight.hardToSeeOnBackground && onDark.hardToSeeOnBackground -> add(
+                stringResource(R.string.warning_hard_to_see_both),
+            )
+
             onLight.hardToSeeOnBackground -> add(stringResource(R.string.warning_hard_to_see_light))
+
             onDark.hardToSeeOnBackground -> add(stringResource(R.string.warning_hard_to_see_dark))
         }
     }

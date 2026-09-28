@@ -35,7 +35,9 @@ private object Keys {
     val basicCount = intPreferencesKey("basic_count")
     val selectionExpanded = booleanPreferencesKey("selection_expanded")
     val showTotal = booleanPreferencesKey("show_total")
-    val advancedCounts = StandardDie.entries.associateWith { intPreferencesKey("advanced_count_${it.name.lowercase()}") }
+    val advancedCounts = StandardDie.entries.associateWith {
+        intPreferencesKey("advanced_count_${it.name.lowercase()}")
+    }
 }
 
 /** Reads settings, replacing missing or invalid values with defaults. */
@@ -47,8 +49,13 @@ internal fun Preferences.toAppSettings(): AppSettings {
     return AppSettings(
         mode = enumOrNull<Mode>(this[Keys.mode]) ?: defaults.mode,
         diceColorMode = enumOrNull<DiceColorMode>(this[Keys.diceColorMode]) ?: defaults.diceColorMode,
-        customColors = if (face != null && pips != null && face != pips) CustomDiceColors(face, pips) else defaults.customColors,
-        basicCount = (this[Keys.basicCount] ?: defaults.basicCount).coerceIn(DiceLimits.BASIC_MIN, DiceLimits.BASIC_MAX),
+        customColors = if (face != null && pips != null && face != pips) {
+            CustomDiceColors(face, pips)
+        } else {
+            defaults.customColors
+        },
+        basicCount = (this[Keys.basicCount] ?: defaults.basicCount)
+            .coerceIn(DiceLimits.BASIC_MIN, DiceLimits.BASIC_MAX),
         advancedSelection = if (hasAdvanced) {
             AdvancedSelection.sanitized(Keys.advancedCounts.mapValues { (_, key) -> this[key] ?: 0 })
         } else {

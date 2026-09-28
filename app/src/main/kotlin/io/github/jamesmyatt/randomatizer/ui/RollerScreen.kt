@@ -95,23 +95,29 @@ fun RollerScreen(
     onRoll: () -> Unit,
     onClearHistory: () -> Unit,
     onUpdateSettings: ((AppSettings) -> AppSettings) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     var showSettings by rememberSaveable { mutableStateOf(false) }
     val colors = MaterialTheme.colorScheme
     val settings = state.settings
-    val style = dieStyle(settings.diceColorMode, settings.customColors, colors.surface.toArgb(), colors.onSurface.toArgb())
+    val style =
+        dieStyle(settings.diceColorMode, settings.customColors, colors.surface.toArgb(), colors.onSurface.toArgb())
     val animated = animatedResults(state.current)
     // Hide the newest history row until its roll animation has finished.
     val history = if (animated.animating) state.history.filter { it.id != state.current?.id } else state.history
 
     Scaffold(
+        modifier = modifier,
         containerColor = colors.surface,
         topBar = {
             TopAppBar(
                 title = { Text(stringResource(R.string.app_name)) },
                 actions = {
                     IconButton(onClick = { showSettings = true }) {
-                        Icon(painterResource(R.drawable.ic_settings), contentDescription = stringResource(R.string.settings))
+                        Icon(
+                            painterResource(R.drawable.ic_settings),
+                            contentDescription = stringResource(R.string.settings),
+                        )
                     }
                 },
             )
@@ -278,9 +284,10 @@ private fun DieCounter(
             enabled = selection.canDecrement(die),
             size = 40.dp,
         ) {
-            onUpdate {
-                val current = it.advancedSelection
-                if (current.canDecrement(die)) it.copy(advancedSelection = current.withCount(die, current.count(die) - 1)) else it
+            onUpdate { s ->
+                val current = s.advancedSelection
+                val count = current.count(die) - 1
+                if (current.canDecrement(die)) s.copy(advancedSelection = current.withCount(die, count)) else s
             }
         }
         Text(
@@ -295,9 +302,10 @@ private fun DieCounter(
             enabled = selection.canIncrement(die),
             size = 40.dp,
         ) {
-            onUpdate {
-                val current = it.advancedSelection
-                if (current.canIncrement(die)) it.copy(advancedSelection = current.withCount(die, current.count(die) + 1)) else it
+            onUpdate { s ->
+                val current = s.advancedSelection
+                val count = current.count(die) + 1
+                if (current.canIncrement(die)) s.copy(advancedSelection = current.withCount(die, count)) else s
             }
         }
     }
@@ -332,6 +340,7 @@ private fun DiceArea(mode: Mode?, results: List<DieResult>?, style: DieStyle) {
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.align(Alignment.CenterVertically),
             )
+
             mode == Mode.Basic -> {
                 val size = when {
                     results.size <= 3 -> 96.dp
@@ -340,10 +349,14 @@ private fun DiceArea(mode: Mode?, results: List<DieResult>?, style: DieStyle) {
                 }
                 results.forEach { PipDie(it.value, style, size) }
             }
+
             else -> {
                 val size = if (results.size <= 8) 68.dp else 56.dp
                 results.forEach { result ->
-                    Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(6.dp),
+                    ) {
                         NumberDie(result.die, result.value, style, size)
                         Text(
                             text = result.die.label,
@@ -420,9 +433,19 @@ private fun HistoryRow(entry: HistoryEntry, isLatest: Boolean, showTotal: Boolea
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 6.dp),
     ) {
-        Text(entry.describe(), color = color, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
+        Text(
+            entry.describe(),
+            color = color,
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier.weight(1f),
+        )
         if (showTotal) {
-            Text(entry.roll.total.toString(), color = color, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold)
+            Text(
+                entry.roll.total.toString(),
+                color = color,
+                style = MaterialTheme.typography.bodyLarge,
+                fontWeight = FontWeight.SemiBold,
+            )
         }
     }
 }

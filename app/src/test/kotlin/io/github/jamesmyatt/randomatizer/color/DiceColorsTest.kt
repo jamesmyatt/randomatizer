@@ -29,12 +29,18 @@ class DiceColorsTest {
 
     @Test
     fun `system dice use the background face with a foreground outline`() {
-        assertEquals(DieStyle(face = white, pips = black, outline = black), dieStyle(DiceColorMode.System, CustomDiceColors.Default, white, black))
+        assertEquals(
+            DieStyle(face = white, pips = black, outline = black),
+            dieStyle(DiceColorMode.System, CustomDiceColors.Default, white, black),
+        )
     }
 
     @Test
     fun `system inverted dice swap face and pips without an outline`() {
-        assertEquals(DieStyle(face = black, pips = white, outline = null), dieStyle(DiceColorMode.SystemInverted, CustomDiceColors.Default, white, black))
+        assertEquals(
+            DieStyle(face = black, pips = white, outline = null),
+            dieStyle(DiceColorMode.SystemInverted, CustomDiceColors.Default, white, black),
+        )
     }
 
     @Test

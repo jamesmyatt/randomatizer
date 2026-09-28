@@ -34,7 +34,14 @@ class RollHistoryTest {
 
     @Test
     fun `basic entries list values only`() {
-        val e = entry(1, DieResult(StandardDie.D6, 4), DieResult(StandardDie.D6, 2), DieResult(StandardDie.D6, 5), mode = Mode.Basic)
+        val e =
+            entry(
+                1,
+                DieResult(StandardDie.D6, 4),
+                DieResult(StandardDie.D6, 2),
+                DieResult(StandardDie.D6, 5),
+                mode = Mode.Basic,
+            )
         assertEquals("4 · 2 · 5", e.describe())
     }
 

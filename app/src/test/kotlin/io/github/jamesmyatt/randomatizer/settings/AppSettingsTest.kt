@@ -14,7 +14,9 @@ import kotlin.test.assertFailsWith
 class AppSettingsTest {
     @Test
     fun `face and pips must differ`() {
-        assertFailsWith<IllegalArgumentException> { CustomDiceColors(face = 0xFF123456.toInt(), pips = 0xFF123456.toInt()) }
+        assertFailsWith<IllegalArgumentException> {
+            CustomDiceColors(face = 0xFF123456.toInt(), pips = 0xFF123456.toInt())
+        }
     }
 
     @Test

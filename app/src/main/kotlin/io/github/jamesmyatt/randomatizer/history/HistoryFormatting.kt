@@ -10,6 +10,7 @@ import io.github.jamesmyatt.randomatizer.settings.Mode
  */
 fun HistoryEntry.describe(): String = when (mode) {
     Mode.Basic -> roll.results.joinToString(" · ") { it.value.toString() }
+
     Mode.Advanced -> roll.results.groupBy { it.die }
         .toSortedMap(compareBy(StandardDie::ordinal))
         .map { (die, results) ->

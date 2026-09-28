@@ -11,10 +11,7 @@ data class HistoryEntry(val id: Long, val roll: Roll, val mode: Mode)
  *
  * Never persist this: history must not be written to storage.
  */
-data class RollHistory(
-    val entries: List<HistoryEntry> = emptyList(),
-    val capacity: Int = DEFAULT_CAPACITY,
-) {
+data class RollHistory(val entries: List<HistoryEntry> = emptyList(), val capacity: Int = DEFAULT_CAPACITY) {
     init {
         require(capacity > 0)
     }

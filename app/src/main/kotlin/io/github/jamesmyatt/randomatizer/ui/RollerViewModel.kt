@@ -22,21 +22,15 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-data class RollerUiState(
-    val settings: AppSettings,
-    val current: HistoryEntry?,
-    val history: List<HistoryEntry>,
-)
+data class RollerUiState(val settings: AppSettings, val current: HistoryEntry?, val history: List<HistoryEntry>)
 
 /**
  * Holds the current roll and the session history in memory only.
  *
  * History deliberately does not use SavedStateHandle: it must never be written to storage.
  */
-class RollerViewModel(
-    private val settingsRepository: SettingsRepository,
-    private val roller: DiceRoller,
-) : ViewModel() {
+class RollerViewModel(private val settingsRepository: SettingsRepository, private val roller: DiceRoller) :
+    ViewModel() {
     private data class Session(
         val current: HistoryEntry? = null,
         val history: RollHistory = RollHistory(),

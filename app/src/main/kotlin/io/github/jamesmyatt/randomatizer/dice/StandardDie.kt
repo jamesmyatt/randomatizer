@@ -8,7 +8,8 @@ enum class StandardDie(val sides: Int) {
     D10(10),
     D12(12),
     D20(20),
-    D100(100);
+    D100(100),
+    ;
 
     /** Conventional short name, e.g. "d20". */
     val label: String get() = "d$sides"

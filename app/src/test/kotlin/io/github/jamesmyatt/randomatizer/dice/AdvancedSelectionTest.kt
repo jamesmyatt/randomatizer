@@ -36,7 +36,9 @@ class AdvancedSelectionTest {
         val full = AdvancedSelection(mapOf(StandardDie.D6 to DiceLimits.ADVANCED_MAX_PER_DIE))
         assertFalse(full.canIncrement(StandardDie.D6))
         assertTrue(full.canIncrement(StandardDie.D8))
-        assertFailsWith<IllegalArgumentException> { full.withCount(StandardDie.D6, DiceLimits.ADVANCED_MAX_PER_DIE + 1) }
+        assertFailsWith<IllegalArgumentException> {
+            full.withCount(StandardDie.D6, DiceLimits.ADVANCED_MAX_PER_DIE + 1)
+        }
     }
 
     @Test
