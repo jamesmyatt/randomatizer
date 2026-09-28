@@ -6,19 +6,53 @@ Releases are published to GitHub Releases by `.github/workflows/release.yml` whe
 
 Generate a keystore once and keep it safe. Losing it means users cannot update to future releases.
 
-`keytool` is in Android Studio's bundled JDK:
+Work in a private folder outside any Git checkout, e.g. `~/keys/randomatizer`. You don't need the code.
 
-- Windows: `C:\Program Files\Android\Android Studio\jbr\bin\keytool.exe`
-- macOS: `/Applications/Android Studio.app/Contents/jbr/Contents/Home/bin/keytool`
-- Linux: `<android-studio>/jbr/bin/keytool`
+### 1. Create the keystore
+
+`keytool` is in Android Studio's bundled JDK. It prompts for passwords and your name.
+
+Linux (adjust the Android Studio path):
 
 ```sh
-keytool -genkeypair -v -keystore randomatizer-release.jks -alias randomatizer \
-  -keyalg RSA -keysize 4096 -validity 10000
+~/android-studio/jbr/bin/keytool -genkeypair -v -keystore randomatizer-release.jks -alias randomatizer -keyalg RSA -keysize 4096 -validity 10000
+```
+
+macOS:
+
+```sh
+"/Applications/Android Studio.app/Contents/jbr/Contents/Home/bin/keytool" -genkeypair -v -keystore randomatizer-release.jks -alias randomatizer -keyalg RSA -keysize 4096 -validity 10000
+```
+
+Windows (PowerShell):
+
+```powershell
+& "C:\Program Files\Android\Android Studio\jbr\bin\keytool.exe" -genkeypair -v -keystore randomatizer-release.jks -alias randomatizer -keyalg RSA -keysize 4096 -validity 10000
+```
+
+### 2. Base64-encode it
+
+Linux:
+
+```sh
 base64 -w0 randomatizer-release.jks > randomatizer-release.jks.b64
 ```
 
-Add these repository secrets (Settings → Secrets and variables → Actions):
+macOS:
+
+```sh
+base64 -i randomatizer-release.jks -o randomatizer-release.jks.b64
+```
+
+Windows (PowerShell):
+
+```powershell
+[Convert]::ToBase64String([IO.File]::ReadAllBytes("$PWD\randomatizer-release.jks")) | Set-Content -NoNewline randomatizer-release.jks.b64
+```
+
+### 3. Add repository secrets
+
+Settings → Secrets and variables → Actions:
 
 | Secret | Value |
 |---|---|
@@ -27,7 +61,9 @@ Add these repository secrets (Settings → Secrets and variables → Actions):
 | `RELEASE_KEY_ALIAS` | `randomatizer` |
 | `RELEASE_KEY_PASSWORD` | Key password |
 
-Then delete the `.b64` file and store the `.jks` and passwords somewhere safe outside the repository.
+### 4. Clean up and back up
+
+Delete the `.b64` file. Back up the `.jks` file and both passwords, e.g. in a password manager.
 
 ## Each release
 
