@@ -16,6 +16,8 @@ class DiceColorsTest {
     private val lightSurface = 0xFFF9F9FF.toInt()
     private val cream = 0xFFFFF8E1.toInt()
     private val midGray = 0xFF757575.toInt()
+    private val teal = 0xFF00897B.toInt()
+    private val blue = 0xFF1976D2.toInt()
     private val lightGray = 0xFFB0B0B0.toInt()
     private val darkGray = 0xFF505050.toInt()
 
@@ -45,13 +47,26 @@ class DiceColorsTest {
     }
 
     @Test
-    fun `custom pips are whichever of foreground and background contrasts more with the face`() {
+    fun `custom pips are the darker or lighter theme color, chosen by the face`() {
         // Light theme.
         assertEquals(lightSurface, dieStyle(DiceFace.Custom, red, lightSurface, darkSurface).pips)
         assertEquals(darkSurface, dieStyle(DiceFace.Custom, cream, lightSurface, darkSurface).pips)
         // Dark theme.
         assertEquals(lightSurface, dieStyle(DiceFace.Custom, red, darkSurface, lightSurface).pips)
         assertEquals(darkSurface, dieStyle(DiceFace.Custom, cream, darkSurface, lightSurface).pips)
+    }
+
+    @Test
+    fun `mid-tone faces get the same kind of pips in light and dark`() {
+        // Tinted theme colors where picking the higher contrast per theme would flip these faces.
+        val light = 0xFFFFF8F6.toInt() to 0xFF231918.toInt()
+        val dark = 0xFF1A110F.toInt() to 0xFFF1DFDA.toInt()
+        // Teal: dark pips in both themes.
+        assertEquals(light.second, dieStyle(DiceFace.Custom, teal, light.first, light.second).pips)
+        assertEquals(dark.first, dieStyle(DiceFace.Custom, teal, dark.first, dark.second).pips)
+        // Blue: light pips in both themes.
+        assertEquals(light.first, dieStyle(DiceFace.Custom, blue, light.first, light.second).pips)
+        assertEquals(dark.second, dieStyle(DiceFace.Custom, blue, dark.first, dark.second).pips)
     }
 
     @Test
