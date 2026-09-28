@@ -327,32 +327,28 @@ private fun CountButton(iconRes: Int, description: String, enabled: Boolean, siz
 
 @Composable
 private fun DiceArea(mode: Mode?, results: List<DieResult>?, style: DieStyle) {
-    FlowRow(
-        horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterHorizontally),
-        verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
-        itemVerticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.fillMaxWidth().heightIn(min = 200.dp).padding(24.dp),
-    ) {
-        when {
-            results == null -> Text(
+    BoxWithConstraints(Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 16.dp)) {
+        if (results == null) {
+            Text(
                 text = stringResource(R.string.ready_to_roll),
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.align(Alignment.CenterVertically),
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth().padding(vertical = 48.dp),
             )
-
-            mode == Mode.Basic -> {
-                val size = when {
-                    results.size <= 3 -> 96.dp
-                    results.size <= 6 -> 80.dp
-                    else -> 64.dp
-                }
-                results.forEach { PipDie(it.value, style, size) }
-            }
-
-            else -> {
-                val size = if (results.size <= 8) 68.dp else 56.dp
-                results.forEach { result ->
+            return@BoxWithConstraints
+        }
+        val size = dieSize(maxWidth, results.size)
+        FlowRow(
+            horizontalArrangement = Arrangement.spacedBy(DIE_SPACING, Alignment.CenterHorizontally),
+            verticalArrangement = Arrangement.spacedBy(DIE_SPACING),
+            itemVerticalAlignment = Alignment.Top,
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            results.forEach { result ->
+                if (mode == Mode.Basic) {
+                    PipDie(result.value, style, size)
+                } else {
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.spacedBy(6.dp),

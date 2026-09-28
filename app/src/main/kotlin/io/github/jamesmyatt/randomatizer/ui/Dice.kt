@@ -16,13 +16,13 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.sp
 import io.github.jamesmyatt.randomatizer.R
 import io.github.jamesmyatt.randomatizer.color.DieStyle
 import io.github.jamesmyatt.randomatizer.dice.StandardDie
@@ -89,7 +89,8 @@ fun NumberDie(die: StandardDie, value: Int, style: DieStyle, size: Dp, modifier:
         Text(
             text = value.toString(),
             color = Color(style.pips),
-            fontSize = (size.value * 0.4f).sp,
+            // In proportion to the die, ignoring the user's font scale so numbers always fit.
+            fontSize = with(LocalDensity.current) { (size * 0.4f).toSp() },
             fontWeight = FontWeight.SemiBold,
         )
     }

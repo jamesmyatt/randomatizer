@@ -65,6 +65,26 @@ class ScreenshotTest {
     }
 
     @Test
+    fun basicFour() = capture("basic-four") {
+        val four = entry(
+            1,
+            Mode.Basic,
+            StandardDie.D6 to 3,
+            StandardDie.D6 to 5,
+            StandardDie.D6 to 1,
+            StandardDie.D6 to 6,
+        )
+        Roller(AppSettings(mode = Mode.Basic, basicCount = 4, selectionExpanded = false), listOf(four))
+    }
+
+    @Test
+    fun basicSeven() = capture("basic-seven") {
+        val values = listOf(1, 2, 3, 4, 5, 6, 3)
+        val seven = entry(1, Mode.Basic, *values.map { StandardDie.D6 to it }.toTypedArray())
+        Roller(AppSettings(mode = Mode.Basic, basicCount = 7, selectionExpanded = false), listOf(seven))
+    }
+
+    @Test
     fun basicLight() = capture("basic-light") {
         Roller(AppSettings(mode = Mode.Basic, basicCount = 3), basicHistory)
     }

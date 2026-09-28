@@ -28,6 +28,7 @@ minSdk 31, targetSdk 37, compileSdk 37.2. AGP built-in Kotlin with the Compose c
 
 - The app UI always uses the system dynamic color scheme and follows system light/dark mode. It is monochrome: accents use `onSurface`/`surface`, not `primary`.
 - Mode is an "Advanced mode" switch in Settings. Switching carries the dice over (`AppSettings.withMode`): Basic → Advanced keeps the same d6s; Advanced → Basic keeps the number of dice, up to 10.
+- Die size depends only on the number of dice (`dieSize` in `ui/DieSize.kt`): fill the available width in one row, clamped to 56–168 dp, so 4d6 looks the same in both modes.
 - Dice colors: System (face `surface`, pips and outline `onSurface`), System inverted (face `onSurface`, pips `surface`) or Custom.
 - Custom dice: face must differ from pips. Face vs pips below 3:1 shows a warning. Face vs background below 3:1 gets an outline in the pips color (no message). Face and pips both below 3:1 against a background shows a warning. Check light and dark backgrounds.
 
