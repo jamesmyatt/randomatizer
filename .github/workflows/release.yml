@@ -23,9 +23,10 @@ jobs:
         id: version
         run: |
           major=$(sed -n 's/^appVersionMajor=//p' gradle.properties)
+          minor=$(sed -n 's/^appVersionMinor=//p' gradle.properties)
           patch=$(sed -n 's/^appVersionPatch=//p' gradle.properties)
-          version="$major.$patch"
-          code=$((major * 1000 + patch))
+          version="$major.$minor.$patch"
+          code=$((major * 10000 + minor * 100 + patch))
           if [ "$GITHUB_REF_NAME" != "v$version" ]; then
             echo "::error::Tag $GITHUB_REF_NAME does not match versionName $version in gradle.properties (expected v$version)"
             exit 1

@@ -14,7 +14,7 @@ body:
     attributes:
       label: App version
       description: Shown at the bottom of Settings.
-      placeholder: "1.0"
+      placeholder: "1.0.0"
     validations:
       required: true
   - type: input
