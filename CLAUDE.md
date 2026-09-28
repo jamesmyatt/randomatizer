@@ -1,6 +1,6 @@
 # Randomatizer
 
-Offline, ad-free, tracking-free dice roller for Android. Apache-2.0. F-Droid compatible.
+Minimalist offline private open-source dice roller. Android, Apache-2.0, F-Droid compatible.
 
 ## Hard rules
 

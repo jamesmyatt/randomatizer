@@ -1,4 +1,4 @@
-Minimalist, flat dice roller for board games.
+Minimalist offline private open-source dice roller.
 
 <ul>
 <li>2 modes:

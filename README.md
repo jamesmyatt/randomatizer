@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/jamesmyatt/randomatizer/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/jamesmyatt/randomatizer/actions/workflows/ci.yml?query=branch%3Amain)
 
-Offline dice roller for board games on Android. Free, open source (Apache-2.0), ad-free and tracking-free.
+Minimalist offline private open-source dice roller.
 
 ## Install
 
