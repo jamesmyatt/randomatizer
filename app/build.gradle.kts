@@ -11,6 +11,9 @@ val appVersionPatch = providers.gradleProperty("appVersionPatch").get().toInt()
 check(appVersionMajor >= 1) { "appVersionMajor must be at least 1" }
 check(appVersionPatch in 0..999) { "appVersionPatch must be in 0..999" }
 
+// Release signing comes from the environment (set by the release workflow). Without it, release APKs are unsigned.
+val releaseKeystore = providers.environmentVariable("RANDOMATIZER_KEYSTORE_FILE")
+
 android {
     namespace = "io.github.jamesmyatt.randomatizer"
     compileSdk {
@@ -25,8 +28,20 @@ android {
         versionName = "$appVersionMajor.$appVersionPatch"
     }
 
+    signingConfigs {
+        if (releaseKeystore.isPresent) {
+            create("release") {
+                storeFile = file(releaseKeystore.get())
+                storePassword = providers.environmentVariable("RANDOMATIZER_KEYSTORE_PASSWORD").get()
+                keyAlias = providers.environmentVariable("RANDOMATIZER_KEY_ALIAS").get()
+                keyPassword = providers.environmentVariable("RANDOMATIZER_KEY_PASSWORD").get()
+            }
+        }
+    }
+
     buildTypes {
         release {
+            signingConfig = signingConfigs.findByName("release")
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
