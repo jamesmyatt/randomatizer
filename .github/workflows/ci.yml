@@ -1,7 +1,9 @@
 name: CI
 
+# PRs get one run (against the merge with main); main builds after each merge.
 on:
   push:
+    branches: [main]
   pull_request:
 
 permissions:

@@ -18,7 +18,7 @@ The project needs JDK 21. If Android Studio bundles a different version, update 
 ## Ways to work
 
 - **Android Studio**: edit, preview Compose screens, run on an emulator or a USB-connected phone (Run ▶).
-- **Remote, CI only**: no local install. Edit in the browser or with a cloud coding agent; CI builds and tests each push. Test on your phone with the CI debug APK (below).
+- **Remote, CI only**: no local install. Edit in the browser or with a cloud coding agent; CI builds and tests each push to an open PR (open a draft PR to get builds). Test on your phone with the CI debug APK (below).
 - **Command line**: any editor, `./gradlew`, and `adb install` to a USB-connected phone. No Compose previews.
 
 Cloud coding sessions run `.claude/hooks/session-start.sh`, which installs the Android SDK. The environment must allow `dl.google.com`.
@@ -43,7 +43,7 @@ Debug builds install alongside the release app as "Randomatizer debug" (applicat
 
 ### From CI
 
-1. Open the CI run for the commit (PR → Checks, or the Actions tab).
+1. Open the CI run for the commit (PR → Checks, or the Actions tab). CI runs for pull requests and for `main`.
 2. Download `randomatizer-debug-<commit>` under Artifacts. It's kept for 14 days.
 3. Unzip it and install `app-debug.apk` on the phone. Allow installs from your browser or file manager if asked.
 
