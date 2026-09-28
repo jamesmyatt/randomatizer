@@ -1,11 +1,29 @@
 package io.github.jamesmyatt.randomatizer.ui
 
+import androidx.annotation.DrawableRes
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredSize
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import com.github.takahirom.roborazzi.DEFAULT_ROBORAZZI_OUTPUT_DIR_PATH
 import com.github.takahirom.roborazzi.RobolectricDeviceQualifiers
 import com.github.takahirom.roborazzi.captureRoboImage
+import io.github.jamesmyatt.randomatizer.R
 import io.github.jamesmyatt.randomatizer.dice.AdvancedSelection
 import io.github.jamesmyatt.randomatizer.dice.DieResult
 import io.github.jamesmyatt.randomatizer.dice.Roll
@@ -62,6 +80,37 @@ class ScreenshotTest {
             onClearHistory = {},
             onUpdateSettings = {},
         )
+    }
+
+    /** The adaptive icon cropped as launchers show it (the middle 72 of 108 dp, as a circle), plus the themed icon. */
+    @Test
+    fun launcherIcon() = capture("launcher-icon") {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(24.dp),
+            modifier = Modifier.background(Color(0xFF808080)).padding(24.dp),
+        ) {
+            LauncherIcon(R.drawable.ic_launcher_foreground, background = Color.White)
+            LauncherIcon(
+                R.drawable.ic_launcher_monochrome,
+                background = Color(0xFFC8E6D4),
+                tint = ColorFilter.tint(Color(0xFF1B3A2F)),
+            )
+        }
+    }
+
+    @Composable
+    private fun LauncherIcon(@DrawableRes layer: Int, background: Color, tint: ColorFilter? = null) {
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier.size(144.dp).clip(CircleShape).background(background),
+        ) {
+            Image(
+                painterResource(layer),
+                contentDescription = null,
+                colorFilter = tint,
+                modifier = Modifier.requiredSize(216.dp),
+            )
+        }
     }
 
     @Test
