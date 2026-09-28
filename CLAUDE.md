@@ -35,6 +35,7 @@ minSdk 31, targetSdk 37, compileSdk 37.2. AGP built-in Kotlin with the Compose c
 - Build and test: `./gradlew assembleDebug testDebugUnitTest`
 - Lint: `./gradlew lintDebug`
 - Unit tests use `SeededRandomSource` (test sources) for determinism.
+- For commits that only change docs (`*.md`, `fastlane/` text), add `[skip ci]` to the commit message. Don't skip CI if any code, resources, build or workflow files change.
 - CI uploads the debug APK as an artifact. Debug builds use application ID suffix `.debug` and the name "Randomatizer debug" (`app/src/debug/res`).
 
 ## Versioning
