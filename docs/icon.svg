@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="18 18 72 72" width="512" height="512">
+  <title>Randomatizer</title>
+  <circle cx="54" cy="54" r="36" fill="#FFFFFF"/>
+  <path fill="#D32F2F" d="M40.36,32.0H67.64A8.36,8.36 0 0 1 76.0 40.36V67.64A8.36,8.36 0 0 1 67.64 76.0H40.36A8.36,8.36 0 0 1 32.0 67.64V40.36A8.36,8.36 0 0 1 40.36 32.0Z"/>
+  <g fill="#FFFFFF"><circle cx="44.32" cy="44.32" r="3.96"/><circle cx="63.68" cy="44.32" r="3.96"/><circle cx="54.0" cy="54.0" r="3.96"/><circle cx="44.32" cy="63.68" r="3.96"/><circle cx="63.68" cy="63.68" r="3.96"/></g>
+</svg>

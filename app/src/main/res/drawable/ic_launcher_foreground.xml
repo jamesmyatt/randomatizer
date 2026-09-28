@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- A red die showing five white pips. Same proportions as the dice in the app (ui/Dice.kt). -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path
+        android:fillColor="#D32F2F"
+        android:pathData="M40.36,32.0H67.64A8.36,8.36 0,0 1,76.0 40.36V67.64A8.36,8.36 0,0 1,67.64 76.0H40.36A8.36,8.36 0,0 1,32.0 67.64V40.36A8.36,8.36 0,0 1,40.36 32.0Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M40.36,44.32a3.96,3.96 0,1 0,7.92 0a3.96,3.96 0,1 0,-7.92 0Z
+            M59.72,44.32a3.96,3.96 0,1 0,7.92 0a3.96,3.96 0,1 0,-7.92 0Z
+            M50.04,54.0a3.96,3.96 0,1 0,7.92 0a3.96,3.96 0,1 0,-7.92 0Z
+            M40.36,63.68a3.96,3.96 0,1 0,7.92 0a3.96,3.96 0,1 0,-7.92 0Z
+            M59.72,63.68a3.96,3.96 0,1 0,7.92 0a3.96,3.96 0,1 0,-7.92 0Z" />
+</vector>

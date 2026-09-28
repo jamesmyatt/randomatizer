@@ -1,0 +1,15 @@
+Minimalist offline private open-source dice roller.
+
+<ul>
+<li>2 modes:
+<ul>
+<li><b>Basic</b>: 1–12 six-sided dice, shown as pips.</li>
+<li><b>Advanced</b>: up to 12 each of d4, d6, d8, d10, d12, d20 and d100, shown as numbers.</li>
+</ul>
+</li>
+<li>Results and optional total.</li>
+<li>Optional, collapsible session history, never saved.</li>
+<li>System colors. Light, dark or system theme. Custom dice colors, with pips that always contrast.</li>
+</ul>
+
+<b>Private, open and fair</b>: no internet permission, no ads, no tracking, no Google Play Services. Rolls use a secure random number generator.
