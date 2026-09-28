@@ -15,6 +15,7 @@ Download the APK from [GitHub Releases](https://github.com/jamesmyatt/randomatiz
 - Shows each result and the total (the total can be hidden in Settings). No modifiers.
 - Roll history for the current session, kept in memory only and never saved.
 - Collapsible dice selection, remembered between sessions with the other settings.
+- Minimalist, flat, monochrome design: no gradients, shadows or 3D dice, just the dice, the total and a Roll button.
 - System dynamic colours and light/dark mode. Dice colours: System, System inverted or Custom, with contrast warnings.
 
 ## Principles
