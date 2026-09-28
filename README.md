@@ -32,7 +32,7 @@ See [GitHub Releases](https://github.com/jamesmyatt/randomatizer/releases).
 
 ## Build
 
-Requires JDK 21 and the Android SDK (`ANDROID_HOME` or `local.properties`).
+Requires [JDK 21](https://adoptium.net/temurin/releases/?version=21) and the Android SDK (`ANDROID_HOME` or `local.properties`).
 
 ```sh
 ./gradlew assembleDebug testDebugUnitTest
