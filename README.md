@@ -17,11 +17,11 @@ Download the APK from [GitHub Releases](https://github.com/jamesmyatt/randomatiz
 - Collapsible dice selection, remembered between sessions with the other settings.
 - System dynamic colours and light/dark mode. Dice colours: System, System inverted or Custom, with contrast warnings.
 
-## Privacy
+## Principles
 
-- No `INTERNET` permission. The build fails if one is merged into the manifest.
-- No Google Play Services, Firebase, analytics or proprietary dependencies.
-- Rolls use `SecureRandom` via `nextInt(bound)`, which has no modulo bias.
+- **Offline and private**: no `INTERNET` permission (the build fails if one is merged into the manifest), no ads, no analytics, no tracking. Roll history is never saved.
+- **Free and open**: Apache-2.0, with no Google Play Services, Firebase or other proprietary dependencies, so it can be built and distributed by F-Droid.
+- **Fair rolls**: `SecureRandom` via `nextInt(bound)`, which has no modulo bias.
 
 ## Build
 
