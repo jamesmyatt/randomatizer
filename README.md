@@ -25,6 +25,10 @@ Download the APK from [GitHub Releases](https://github.com/jamesmyatt/randomatiz
 - **Open**: Apache-2.0, no proprietary dependencies, F-Droid compatible.
 - **Fair**: `SecureRandom` with no modulo bias.
 
+## Changelog
+
+See [GitHub Releases](https://github.com/jamesmyatt/randomatizer/releases).
+
 ## Build
 
 Requires JDK 21 and the Android SDK (`ANDROID_HOME` or `local.properties`).

@@ -41,7 +41,7 @@ minSdk 31, targetSdk 37, compileSdk 37.2. AGP built-in Kotlin with the Compose c
 - `versionName` is `MAJOR.PATCH`, set in `gradle.properties` (`appVersionMajor`, `appVersionPatch`). `versionCode = MAJOR * 1000 + PATCH`.
 - Most code changes bump MAJOR and reset PATCH to 0. Bump PATCH only for small fixes, docs or build-only changes.
 - Bump the version at most once per branch/PR, relative to the base branch. If the branch already bumps it, don't bump again for further commits; just update that version's changelog (use a MAJOR bump if any change on the branch needs one).
-- Every version bump adds `fastlane/metadata/android/en-US/changelogs/<versionCode>.txt`.
+- Every version bump adds `fastlane/metadata/android/en-US/changelogs/<versionCode>.txt`. These files are the only changelog: they feed GitHub Release notes and F-Droid. Don't add a separate `CHANGELOG.md`.
 
 ## Releases
 
