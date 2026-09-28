@@ -22,6 +22,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ColorScheme
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -52,6 +54,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -96,7 +99,7 @@ internal fun SettingsContent(
         SwitchRow(stringResource(R.string.show_total), settings.showTotal) { show ->
             onUpdate { it.copy(showTotal = show) }
         }
-        ThemeSection(settings.themeMode) { mode -> onUpdate { it.copy(themeMode = mode) } }
+        ThemeRow(settings.themeMode) { mode -> onUpdate { it.copy(themeMode = mode) } }
         DiceColorSection(settings) { face -> onUpdate { it.copy(diceFace = face) } }
         if (settings.diceFace == DiceFace.Custom) {
             CustomFaceEditor(settings.customFace) { argb -> onUpdate { it.copy(customFace = argb) } }
@@ -167,18 +170,45 @@ private fun RadioRow(label: String, selected: Boolean, onClick: () -> Unit, trai
 }
 
 @Composable
-private fun ThemeSection(selected: ThemeMode, onSelect: (ThemeMode) -> Unit) {
-    Column(Modifier.selectableGroup()) {
-        SectionTitle(stringResource(R.string.theme))
-        ThemeMode.entries.forEach { mode ->
-            val label = when (mode) {
-                ThemeMode.System -> R.string.theme_system
-                ThemeMode.Light -> R.string.light
-                ThemeMode.Dark -> R.string.dark
+private fun ThemeRow(selected: ThemeMode, onSelect: (ThemeMode) -> Unit) {
+    var open by remember { mutableStateOf(false) }
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .heightIn(min = 48.dp)
+            .clickable(role = Role.DropdownList) { open = true },
+    ) {
+        Text(stringResource(R.string.theme), style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
+        Box {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                Text(
+                    text = stringResource(themeLabel(selected)),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+                Icon(painterResource(R.drawable.ic_expand_more), contentDescription = null)
             }
-            RadioRow(stringResource(label), selected = mode == selected, onClick = { onSelect(mode) })
+            DropdownMenu(expanded = open, onDismissRequest = { open = false }) {
+                ThemeMode.entries.forEach { mode ->
+                    DropdownMenuItem(
+                        text = { Text(stringResource(themeLabel(mode))) },
+                        onClick = {
+                            open = false
+                            onSelect(mode)
+                        },
+                        modifier = Modifier.semantics { this.selected = mode == selected },
+                    )
+                }
+            }
         }
     }
+}
+
+private fun themeLabel(mode: ThemeMode): Int = when (mode) {
+    ThemeMode.System -> R.string.theme_system
+    ThemeMode.Light -> R.string.light
+    ThemeMode.Dark -> R.string.dark
 }
 
 @Composable

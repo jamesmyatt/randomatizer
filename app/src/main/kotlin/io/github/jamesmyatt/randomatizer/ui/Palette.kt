@@ -9,7 +9,7 @@ data class Swatch(val argb: Int, @StringRes val name: Int)
 val DicePalette = listOf(
     Swatch(0xFFD32F2F.toInt(), R.string.color_red),
     Swatch(0xFFF57C00.toInt(), R.string.color_orange),
-    Swatch(0xFFFBC02D.toInt(), R.string.color_yellow),
+    Swatch(0xFFFFD600.toInt(), R.string.color_yellow),
     Swatch(0xFF388E3C.toInt(), R.string.color_green),
     Swatch(0xFF1976D2.toInt(), R.string.color_blue),
     Swatch(0xFF7B1FA2.toInt(), R.string.color_purple),

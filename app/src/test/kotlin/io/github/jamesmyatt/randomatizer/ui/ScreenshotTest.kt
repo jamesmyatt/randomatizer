@@ -90,6 +90,11 @@ class ScreenshotTest {
     }
 
     @Test
+    fun basicHistoryCollapsed() = capture("basic-history-collapsed") {
+        Roller(AppSettings(mode = Mode.Basic, basicCount = 3, historyExpanded = false), basicHistory)
+    }
+
+    @Test
     fun basicDarkForeground() = capture("basic-dark-foreground", dark = true) {
         Roller(
             AppSettings(mode = Mode.Basic, basicCount = 3, diceFace = DiceFace.Foreground),

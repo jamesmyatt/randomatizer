@@ -33,6 +33,7 @@ private object Keys {
     val customFace = intPreferencesKey("custom_face")
     val basicCount = intPreferencesKey("basic_count")
     val selectionExpanded = booleanPreferencesKey("selection_expanded")
+    val historyExpanded = booleanPreferencesKey("history_expanded")
     val showTotal = booleanPreferencesKey("show_total")
     val themeMode = stringPreferencesKey("theme_mode")
     val advancedCounts = StandardDie.entries.associateWith {
@@ -57,6 +58,7 @@ internal fun Preferences.toAppSettings(): AppSettings {
             defaults.advancedSelection
         },
         selectionExpanded = this[Keys.selectionExpanded] ?: defaults.selectionExpanded,
+        historyExpanded = this[Keys.historyExpanded] ?: defaults.historyExpanded,
         showTotal = this[Keys.showTotal] ?: defaults.showTotal,
         themeMode = enumOrNull<ThemeMode>(this[Keys.themeMode]) ?: defaults.themeMode,
     )
@@ -68,6 +70,7 @@ internal fun MutablePreferences.write(settings: AppSettings) {
     this[Keys.customFace] = settings.customFace
     this[Keys.basicCount] = settings.basicCount
     this[Keys.selectionExpanded] = settings.selectionExpanded
+    this[Keys.historyExpanded] = settings.historyExpanded
     this[Keys.showTotal] = settings.showTotal
     this[Keys.themeMode] = settings.themeMode.name
     Keys.advancedCounts.forEach { (die, key) -> this[key] = settings.advancedSelection.count(die) }

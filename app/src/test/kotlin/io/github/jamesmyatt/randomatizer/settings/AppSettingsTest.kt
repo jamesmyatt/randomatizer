@@ -25,6 +25,7 @@ class AppSettingsTest {
             basicCount = 7,
             advancedSelection = AdvancedSelection(mapOf(StandardDie.D20 to 1, StandardDie.D100 to 3)),
             selectionExpanded = false,
+            historyExpanded = false,
             showTotal = false,
             themeMode = ThemeMode.Dark,
         )

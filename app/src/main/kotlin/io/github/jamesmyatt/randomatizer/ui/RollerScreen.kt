@@ -19,7 +19,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -45,6 +47,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.layout.Placeable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
@@ -55,6 +59,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -75,6 +80,7 @@ import kotlin.random.Random
 
 private const val ROLL_FRAMES = 7
 private const val ROLL_FRAME_MS = 40L
+private const val MAIN_MAX_FRACTION = 0.6f
 
 @Composable
 fun RollerRoute(viewModel: RollerViewModel = viewModel(factory = RollerViewModel.Factory)) {
@@ -124,20 +130,31 @@ fun RollerScreen(
             )
         },
     ) { padding ->
-        LazyColumn(contentPadding = padding, modifier = Modifier.fillMaxSize()) {
-            item { SelectionPanel(settings, onUpdateSettings) }
-            item { DiceArea(state.current?.mode, animated.results, style) }
-            if (settings.showTotal) {
-                item { Total(animated.results) }
-            }
-            item { RollButton(settings, onRoll) }
-            if (history.isNotEmpty()) {
-                item { HistoryHeader(onClearHistory) }
-                itemsIndexed(history, key = { _, entry -> entry.id }) { index, entry ->
-                    HistoryRow(entry, isLatest = index == 0, showTotal = settings.showTotal)
+        RollerLayout(
+            historyExpanded = settings.historyExpanded,
+            main = {
+                Column(Modifier.verticalScroll(rememberScrollState())) {
+                    SelectionPanel(settings, onUpdateSettings)
+                    DiceArea(state.current?.mode, animated.results, style)
+                    if (settings.showTotal) {
+                        Total(animated.results)
+                    }
+                    RollButton(settings, onRoll)
                 }
-            }
-        }
+            },
+            history = {
+                if (history.isNotEmpty()) {
+                    HistoryPanel(
+                        history = history,
+                        expanded = settings.historyExpanded,
+                        showTotal = settings.showTotal,
+                        onToggle = { onUpdateSettings { it.copy(historyExpanded = !it.historyExpanded) } },
+                        onClear = onClearHistory,
+                    )
+                }
+            },
+            modifier = Modifier.fillMaxSize().padding(padding),
+        )
     }
 
     if (showSettings) {
@@ -407,19 +424,85 @@ private fun RollButton(settings: AppSettings, onRoll: () -> Unit) {
     }
 }
 
+/**
+ * Places [main] at the top and [history] pinned to the bottom.
+ *
+ * Collapsed history is just its header, and [main] gets the rest. Expanded history fills the space below [main],
+ * which is capped at [MAIN_MAX_FRACTION] of the height (and scrolls) so the history always has room.
+ */
 @Composable
-private fun HistoryHeader(onClear: () -> Unit) {
+private fun RollerLayout(
+    historyExpanded: Boolean,
+    main: @Composable () -> Unit,
+    history: @Composable () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Layout(contents = listOf(main, history), modifier = modifier) { (mainParts, historyParts), constraints ->
+        val width = constraints.maxWidth
+        val height = constraints.maxHeight
+        val loose = Constraints(minWidth = width, maxWidth = width)
+        val mainPlaceable: Placeable
+        val historyPlaceable: Placeable?
+        if (historyExpanded && historyParts.isNotEmpty()) {
+            mainPlaceable = mainParts.single().measure(loose.copy(maxHeight = (height * MAIN_MAX_FRACTION).toInt()))
+            historyPlaceable = historyParts.single().measure(Constraints.fixed(width, height - mainPlaceable.height))
+        } else {
+            historyPlaceable = historyParts.singleOrNull()?.measure(loose.copy(maxHeight = height))
+            mainPlaceable = mainParts.single().measure(loose.copy(maxHeight = height - (historyPlaceable?.height ?: 0)))
+        }
+        layout(width, height) {
+            mainPlaceable.place(0, 0)
+            historyPlaceable?.place(0, height - historyPlaceable.height)
+        }
+    }
+}
+
+@Composable
+private fun HistoryPanel(
+    history: List<HistoryEntry>,
+    expanded: Boolean,
+    showTotal: Boolean,
+    onToggle: () -> Unit,
+    onClear: () -> Unit,
+) {
+    Column {
+        HistoryHeader(expanded, onToggle, onClear)
+        if (expanded) {
+            LazyColumn(Modifier.weight(1f)) {
+                itemsIndexed(history, key = { _, entry -> entry.id }) { index, entry ->
+                    HistoryRow(entry, isLatest = index == 0, showTotal = showTotal)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun HistoryHeader(expanded: Boolean, onToggle: () -> Unit, onClear: () -> Unit) {
+    val stateText = stringResource(if (expanded) R.string.expanded else R.string.collapsed)
     Column {
         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth().padding(start = 24.dp, end = 16.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .heightIn(min = 48.dp)
+                .clickable(onClick = onToggle)
+                .semantics { stateDescription = stateText }
+                .padding(start = 24.dp, end = 16.dp),
         ) {
             Text(
                 text = stringResource(R.string.history),
                 style = MaterialTheme.typography.titleSmall,
-                modifier = Modifier.weight(1f),
             )
+            // Expanded history collapses down to the bottom; collapsed history expands up.
+            Icon(
+                painterResource(if (expanded) R.drawable.ic_expand_more else R.drawable.ic_expand_less),
+                contentDescription = null,
+                modifier = Modifier.size(20.dp),
+            )
+            Spacer(Modifier.weight(1f))
             TextButton(
                 onClick = onClear,
                 colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.onSurface),

@@ -24,6 +24,7 @@ data class AppSettings(
     val basicCount: Int = DEFAULT_BASIC_COUNT,
     val advancedSelection: AdvancedSelection = AdvancedSelection.Default,
     val selectionExpanded: Boolean = true,
+    val historyExpanded: Boolean = true,
     /** Show the total on the main screen and in the history. */
     val showTotal: Boolean = true,
     val themeMode: ThemeMode = ThemeMode.System,
