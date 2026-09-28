@@ -30,17 +30,9 @@ Download the APK from [GitHub Releases](https://github.com/jamesmyatt/randomatiz
 
 See [GitHub Releases](https://github.com/jamesmyatt/randomatizer/releases).
 
-## Build
+## Development
 
-Open the project in [Android Studio](https://developer.android.com/studio), which includes the JDK and Android SDK. To build from the command line, set `JAVA_HOME` to Android Studio's bundled JDK (`jbr`).
-
-```sh
-./gradlew assembleDebug testDebugUnitTest
-```
-
-Each CI run keeps a debug APK for 14 days (under Artifacts on the run's page). It installs alongside the release app as "Randomatizer debug".
-
-To publish a release, see [RELEASING.md](RELEASING.md).
+See [DEVELOPING.md](DEVELOPING.md). To publish a release, see [RELEASING.md](RELEASING.md).
 
 ## License
 

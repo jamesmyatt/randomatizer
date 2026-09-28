@@ -46,7 +46,7 @@ minSdk 31, targetSdk 37, compileSdk 37.2. AGP built-in Kotlin with the Compose c
 
 ## Releases
 
-- Maintainer steps are in `RELEASING.md` (not the README, which is for users). Pushing tag `v<MAJOR>.<PATCH>` runs `.github/workflows/release.yml`, which builds a signed APK and publishes a GitHub Release. The tag must match `gradle.properties` and the changelog must exist.
+- Developer setup and phone testing are in `DEVELOPING.md`; maintainer release steps in `RELEASING.md`. The README is for users. Pushing tag `v<MAJOR>.<PATCH>` runs `.github/workflows/release.yml`, which builds a signed APK and publishes a GitHub Release. The tag must match `gradle.properties` and the changelog must exist.
 - Release signing is read only from environment variables (`RANDOMATIZER_KEYSTORE_FILE`, `RANDOMATIZER_KEYSTORE_PASSWORD`, `RANDOMATIZER_KEY_ALIAS`, `RANDOMATIZER_KEY_PASSWORD`), fed from repository secrets. Never commit keystores, passwords or `.b64` files.
 - Don't push release tags unless asked.
 
