@@ -17,19 +17,19 @@ class DieSizeTest {
 
     @Test
     fun `three dice fill the width`() {
-        assertEquals(110.dp, dieSize(phone, 3)) // (364 - 32 - 1) / 3 = 110.3
+        assertEquals(107.dp, dieSize(phone, 3)) // (364 - 40 - 1) / 3 = 107.7
     }
 
     @Test
     fun `four dice just fit and more use the minimum size`() {
-        assertEquals(MIN_DIE_SIZE, dieSize(phone, 4)) // (364 - 48 - 1) / 4 = 78.75
+        assertEquals(MIN_DIE_SIZE, dieSize(phone, 4)) // (364 - 60 - 1) / 4 = 75.75
         assertEquals(MIN_DIE_SIZE, dieSize(phone, 5))
         assertEquals(MIN_DIE_SIZE, dieSize(phone, 84))
     }
 
     @Test
     fun `wider screens fit more dice before reaching the minimum`() {
-        assertEquals(93.dp, dieSize(752.dp, 7)) // (752 - 96 - 1) / 7 = 93.6
+        assertEquals(90.dp, dieSize(752.dp, 7)) // (752 - 120 - 1) / 7 = 90.1
     }
 
     @Test

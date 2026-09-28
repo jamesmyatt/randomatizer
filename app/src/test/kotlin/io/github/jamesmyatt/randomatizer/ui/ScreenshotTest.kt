@@ -114,6 +114,14 @@ class ScreenshotTest {
     }
 
     @Test
+    fun basicTwo() = capture("basic-two") {
+        Roller(
+            AppSettings(mode = Mode.Basic, basicCount = 2, selectionExpanded = false),
+            listOf(entry(1, Mode.Basic, StandardDie.D6 to 4, StandardDie.D6 to 6)),
+        )
+    }
+
+    @Test
     fun basicFour() = capture("basic-four") {
         val four = entry(
             1,

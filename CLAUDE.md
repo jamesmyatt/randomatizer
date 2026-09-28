@@ -31,7 +31,7 @@ minSdk 31, targetSdk 37, compileSdk 37.2. AGP built-in Kotlin with the Compose c
 - Mode is an "Advanced mode" switch in Settings. Switching carries the dice over (`AppSettings.withMode`): Basic → Advanced keeps the same d6s; Advanced → Basic keeps the number of dice, up to 12.
 - "Keep history" setting: turning it off discards the in-memory history and stops adding rolls; the History panel is hidden.
 - History is pinned to the bottom and collapsible. Expanded, it fills the space below the Roll button; the area above is capped at 60% of the height and scrolls.
-- Die size depends only on the number of dice (`dieSize` in `ui/DieSize.kt`): fill the available width in one row, clamped to 78–168 dp (4 per row on a typical phone), so 4d6 looks the same in both modes.
+- Die size depends only on the number of dice (`dieSize` in `ui/DieSize.kt`): fill the available width in one row, clamped to 75–152 dp with 20 dp gaps (4 per row on a typical phone), so 4d6 looks the same in both modes.
 - Dice color sets the face only: Background (`surface`, default), Foreground (`onSurface`) or Custom (18-swatch palette). Pips and numbers are the darker or lighter of `surface` and `onSurface`, chosen by whether black or white contrasts more with the face, so a face gets the same kind of pips in light and dark.
 - Face vs background below 3:1 gets an outline in the pips color (no message). Custom face vs pips below 3:1 in light or dark shows a warning.
 

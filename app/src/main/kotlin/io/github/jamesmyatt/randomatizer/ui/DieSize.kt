@@ -5,13 +5,13 @@ import androidx.compose.ui.unit.dp
 import kotlin.math.floor
 
 /** Gap between dice, horizontally and vertically. */
-internal val DIE_SPACING = 16.dp
+internal val DIE_SPACING = 20.dp
 
-/** Smallest die: about 5 across a typical phone (~412 dp wide). More dice wrap onto further rows. */
-internal val MIN_DIE_SIZE = 78.dp
+/** Smallest die: 4 across a typical phone (~412 dp wide). More dice wrap onto further rows. */
+internal val MIN_DIE_SIZE = 75.dp
 
 /** Largest die: about 2 across a typical phone. */
-internal val MAX_DIE_SIZE = 168.dp
+internal val MAX_DIE_SIZE = 152.dp
 
 /**
  * Size of each die so that [count] dice fill [availableWidth] in one row, clamped to
