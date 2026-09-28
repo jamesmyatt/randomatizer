@@ -10,19 +10,18 @@ Download the APK from [GitHub Releases](https://github.com/jamesmyatt/randomatiz
 
 ## Features
 
-- **Basic mode**: 1–10 d6, shown as pips.
-- **Advanced mode**: any mix of d4, d6, d8, d10, d12, d20 and d100 (up to 10 of each), shown as numbers.
-- Shows each result and the total (the total can be hidden in Settings). No modifiers.
-- Roll history for the current session, kept in memory only and never saved.
-- Collapsible dice selection, remembered between sessions with the other settings.
-- Minimalist, flat, monochrome design: no gradients, shadows or 3D dice, just the dice, the total and a Roll button.
-- System dynamic colours and light/dark mode. Dice colours: System, System inverted or Custom, with contrast warnings.
+- **Basic**: 1–10 d6, shown as pips.
+- **Advanced**: up to 10 each of d4, d6, d8, d10, d12, d20 and d100, shown as numbers.
+- Results and optional total. No modifiers.
+- Session history, never saved.
+- Minimalist, flat, monochrome design.
+- System colours and light/dark mode. Dice colours: system, inverted or custom, with contrast checks.
 
 ## Principles
 
-- **Offline and private**: no `INTERNET` permission (the build fails if one is merged into the manifest), no ads, no analytics, no tracking. Roll history is never saved.
-- **Free and open**: Apache-2.0, with no Google Play Services, Firebase or other proprietary dependencies, so it can be built and distributed by F-Droid.
-- **Fair rolls**: `SecureRandom` via `nextInt(bound)`, which has no modulo bias.
+- **Private**: works offline, no `INTERNET` permission (enforced at build time), no ads or tracking.
+- **Open**: Apache-2.0, no proprietary dependencies, F-Droid compatible.
+- **Fair**: `SecureRandom` with no modulo bias.
 
 ## Build
 
