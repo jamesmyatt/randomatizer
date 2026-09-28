@@ -120,12 +120,14 @@ fun RollerScreen(
         LazyColumn(contentPadding = padding, modifier = Modifier.fillMaxSize()) {
             item { SelectionPanel(settings, onUpdateSettings) }
             item { DiceArea(state.current?.mode, animated.results, style) }
-            item { Total(animated.results) }
+            if (settings.showTotal) {
+                item { Total(animated.results) }
+            }
             item { RollButton(settings, onRoll) }
             if (history.isNotEmpty()) {
                 item { HistoryHeader(onClearHistory) }
                 items(history, key = { it.id }) { entry ->
-                    HistoryRow(entry, isLatest = entry.id == state.current?.id)
+                    HistoryRow(entry, isLatest = entry.id == state.current?.id, showTotal = settings.showTotal)
                 }
             }
         }
@@ -412,13 +414,15 @@ private fun HistoryHeader(onClear: () -> Unit) {
 }
 
 @Composable
-private fun HistoryRow(entry: HistoryEntry, isLatest: Boolean) {
+private fun HistoryRow(entry: HistoryEntry, isLatest: Boolean, showTotal: Boolean) {
     val colour = if (isLatest) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant
     Row(
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 6.dp),
     ) {
         Text(entry.describe(), color = colour, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
-        Text(entry.roll.total.toString(), color = colour, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold)
+        if (showTotal) {
+            Text(entry.roll.total.toString(), color = colour, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold)
+        }
     }
 }

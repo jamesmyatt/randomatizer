@@ -31,6 +31,7 @@ class AppSettingsTest {
             basicCount = 7,
             advancedSelection = AdvancedSelection(mapOf(StandardDie.D20 to 1, StandardDie.D100 to 3)),
             selectionExpanded = false,
+            showTotal = false,
         )
         val prefs = mutablePreferencesOf().apply { write(settings) }
         assertEquals(settings, prefs.toAppSettings())

@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -30,6 +31,8 @@ import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
@@ -86,6 +89,7 @@ fun SettingsSheet(
         ) {
             Text(stringResource(R.string.settings), style = MaterialTheme.typography.headlineSmall)
             ModeSection(settings.mode) { mode -> onUpdate { it.copy(mode = mode) } }
+            ShowTotalRow(settings.showTotal) { show -> onUpdate { it.copy(showTotal = show) } }
             DiceColourSection(settings) { mode -> onUpdate { it.copy(diceColourMode = mode) } }
             if (settings.diceColourMode == DiceColourMode.Custom) {
                 CustomColoursEditor(
@@ -136,6 +140,29 @@ private fun ModeSection(selected: Mode, onSelect: (Mode) -> Unit) {
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun ShowTotalRow(checked: Boolean, onChange: (Boolean) -> Unit) {
+    val colours = MaterialTheme.colorScheme
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .heightIn(min = 48.dp)
+            .toggleable(value = checked, onValueChange = onChange, role = Role.Switch),
+    ) {
+        Text(stringResource(R.string.show_total), style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
+        Switch(
+            checked = checked,
+            onCheckedChange = null,
+            colors = SwitchDefaults.colors(
+                checkedThumbColor = colours.surface,
+                checkedTrackColor = colours.onSurface,
+                checkedBorderColor = colours.onSurface,
+            ),
+        )
     }
 }
 

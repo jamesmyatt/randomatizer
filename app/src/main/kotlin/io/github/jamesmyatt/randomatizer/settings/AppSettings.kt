@@ -27,6 +27,8 @@ data class AppSettings(
     val basicCount: Int = DEFAULT_BASIC_COUNT,
     val advancedSelection: AdvancedSelection = AdvancedSelection.Default,
     val selectionExpanded: Boolean = true,
+    /** Show the total on the main screen and in the history. */
+    val showTotal: Boolean = true,
 ) {
     init {
         require(basicCount in DiceLimits.BASIC_MIN..DiceLimits.BASIC_MAX) { "Basic count out of range: $basicCount" }

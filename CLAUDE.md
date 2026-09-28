@@ -7,7 +7,7 @@ Offline, ad-free, tracking-free dice roller for Android. Apache-2.0. F-Droid com
 - No `INTERNET` (or any network) permission. `verify<Variant>Permissions` fails the build if the merged manifest has it. Never disable or weaken that task.
 - No Google Play Services, Firebase, analytics or proprietary dependencies. Add dependencies only via `gradle/libs.versions.toml`, and only if FOSS.
 - Roll history lives in memory only (`RollerViewModel`). Never persist it: no files, DataStore, Room, `SavedStateHandle` or `rememberSaveable`.
-- Only settings (mode, dice colours, last dice selection, panel expanded) may be persisted, via `SettingsRepository` (DataStore).
+- Only settings (mode, show total, dice colours, last dice selection, panel expanded) may be persisted, via `SettingsRepository` (DataStore).
 - All roll randomness goes through `RandomSource` / `DiceRoller`. Never use `%` to map random numbers to a range; use `nextInt(bound)`. The roll animation's random faces are cosmetic and use `kotlin.random.Random`.
 - `dice/`, `history/`, `colour/` and `settings/AppSettings.kt` must not import Android classes, so they stay unit-testable on the JVM.
 

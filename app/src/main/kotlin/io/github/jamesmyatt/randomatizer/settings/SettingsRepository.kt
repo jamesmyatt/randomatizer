@@ -34,6 +34,7 @@ private object Keys {
     val customPips = intPreferencesKey("custom_pips")
     val basicCount = intPreferencesKey("basic_count")
     val selectionExpanded = booleanPreferencesKey("selection_expanded")
+    val showTotal = booleanPreferencesKey("show_total")
     val advancedCounts = StandardDie.entries.associateWith { intPreferencesKey("advanced_count_${it.name.lowercase()}") }
 }
 
@@ -54,6 +55,7 @@ internal fun Preferences.toAppSettings(): AppSettings {
             defaults.advancedSelection
         },
         selectionExpanded = this[Keys.selectionExpanded] ?: defaults.selectionExpanded,
+        showTotal = this[Keys.showTotal] ?: defaults.showTotal,
     )
 }
 
@@ -64,6 +66,7 @@ internal fun MutablePreferences.write(settings: AppSettings) {
     this[Keys.customPips] = settings.customColours.pips
     this[Keys.basicCount] = settings.basicCount
     this[Keys.selectionExpanded] = settings.selectionExpanded
+    this[Keys.showTotal] = settings.showTotal
     Keys.advancedCounts.forEach { (die, key) -> this[key] = settings.advancedSelection.count(die) }
 }
 

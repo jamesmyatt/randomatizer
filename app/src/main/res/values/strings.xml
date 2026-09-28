@@ -26,6 +26,7 @@
     <string name="mode">Mode</string>
     <string name="mode_basic">Basic</string>
     <string name="mode_advanced">Advanced</string>
+    <string name="show_total">Show total</string>
     <string name="dice_colours">Dice colours</string>
     <string name="dice_colours_system">System</string>
     <string name="dice_colours_system_inverted">System inverted</string>
