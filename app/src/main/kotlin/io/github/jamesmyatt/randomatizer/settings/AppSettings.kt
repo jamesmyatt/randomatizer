@@ -2,6 +2,7 @@ package io.github.jamesmyatt.randomatizer.settings
 
 import io.github.jamesmyatt.randomatizer.dice.AdvancedSelection
 import io.github.jamesmyatt.randomatizer.dice.DiceLimits
+import io.github.jamesmyatt.randomatizer.dice.StandardDie
 
 enum class Mode { Basic, Advanced }
 
@@ -32,6 +33,24 @@ data class AppSettings(
 ) {
     init {
         require(basicCount in DiceLimits.BASIC_MIN..DiceLimits.BASIC_MAX) { "Basic count out of range: $basicCount" }
+    }
+
+    /**
+     * Switches mode, carrying the dice over: Basic to Advanced keeps the same d6s;
+     * Advanced to Basic keeps the number of dice, up to the Basic maximum.
+     */
+    fun withMode(newMode: Mode): AppSettings = when {
+        newMode == mode -> this
+
+        newMode == Mode.Advanced -> copy(
+            mode = newMode,
+            advancedSelection = AdvancedSelection(mapOf(StandardDie.D6 to basicCount)),
+        )
+
+        else -> copy(
+            mode = newMode,
+            basicCount = advancedSelection.total.coerceIn(DiceLimits.BASIC_MIN, DiceLimits.BASIC_MAX),
+        )
     }
 
     companion object {

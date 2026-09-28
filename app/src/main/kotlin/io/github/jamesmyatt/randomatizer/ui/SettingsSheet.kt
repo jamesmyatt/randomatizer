@@ -28,9 +28,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.RadioButtonDefaults
-import androidx.compose.material3.SegmentedButton
-import androidx.compose.material3.SegmentedButtonDefaults
-import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
@@ -95,8 +92,12 @@ internal fun SettingsContent(
             .padding(start = 24.dp, end = 24.dp, bottom = 24.dp),
     ) {
         Text(stringResource(R.string.settings), style = MaterialTheme.typography.headlineSmall)
-        ModeSection(settings.mode) { mode -> onUpdate { it.copy(mode = mode) } }
-        ShowTotalRow(settings.showTotal) { show -> onUpdate { it.copy(showTotal = show) } }
+        SwitchRow(stringResource(R.string.advanced_mode), settings.mode == Mode.Advanced) { on ->
+            onUpdate { it.withMode(if (on) Mode.Advanced else Mode.Basic) }
+        }
+        SwitchRow(stringResource(R.string.show_total), settings.showTotal) { show ->
+            onUpdate { it.copy(showTotal = show) }
+        }
         DiceColorSection(settings) { mode -> onUpdate { it.copy(diceColorMode = mode) } }
         if (settings.diceColorMode == DiceColorMode.Custom) {
             CustomColorsEditor(
@@ -128,33 +129,8 @@ private fun SectionTitle(text: String) {
     Text(text, style = MaterialTheme.typography.titleSmall)
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun ModeSection(selected: Mode, onSelect: (Mode) -> Unit) {
-    val colors = MaterialTheme.colorScheme
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        SectionTitle(stringResource(R.string.mode))
-        SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
-            Mode.entries.forEachIndexed { index, mode ->
-                SegmentedButton(
-                    selected = mode == selected,
-                    onClick = { onSelect(mode) },
-                    shape = SegmentedButtonDefaults.itemShape(index, Mode.entries.size),
-                    colors = SegmentedButtonDefaults.colors(
-                        activeContainerColor = colors.onSurface,
-                        activeContentColor = colors.surface,
-                    ),
-                    icon = {},
-                ) {
-                    Text(stringResource(if (mode == Mode.Basic) R.string.mode_basic else R.string.mode_advanced))
-                }
-            }
-        }
-    }
-}
-
-@Composable
-private fun ShowTotalRow(checked: Boolean, onChange: (Boolean) -> Unit) {
+private fun SwitchRow(label: String, checked: Boolean, onChange: (Boolean) -> Unit) {
     val colors = MaterialTheme.colorScheme
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -164,7 +140,7 @@ private fun ShowTotalRow(checked: Boolean, onChange: (Boolean) -> Unit) {
             .toggleable(value = checked, onValueChange = onChange, role = Role.Switch),
     ) {
         Text(
-            stringResource(R.string.show_total),
+            label,
             style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier.weight(1f),
         )
