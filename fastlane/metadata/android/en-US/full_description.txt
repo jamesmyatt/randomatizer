@@ -8,7 +8,7 @@ Minimalist, flat dice roller for board games.
 </ul>
 </li>
 <li>Results and optional total.</li>
-<li>Session history, never saved.</li>
+<li>Collapsible session history, never saved.</li>
 <li>System colors. Light, dark or system theme. Custom dice colors, with pips that always contrast.</li>
 </ul>
 
