@@ -68,15 +68,22 @@ jobs:
           sha256sum "$apk" > "$apk.sha256"
           echo "apk=$apk" >> "$GITHUB_OUTPUT"
 
+      # A tag pushed with git has no release yet, so create one. A tag created by publishing a release
+      # on GitHub already has one: attach the APK to it and replace its notes with the changelog.
       - name: Publish GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}
+          APK: ${{ steps.apk.outputs.apk }}
+          TITLE: Randomatizer ${{ steps.version.outputs.version }}
+          NOTES: ${{ steps.version.outputs.changelog }}
         run: |
-          gh release create "$GITHUB_REF_NAME" \
-            "${{ steps.apk.outputs.apk }}" "${{ steps.apk.outputs.apk }}.sha256" \
-            --title "Randomatizer ${{ steps.version.outputs.version }}" \
-            --notes-file "${{ steps.version.outputs.changelog }}" \
-            --verify-tag
+          if gh release view "$GITHUB_REF_NAME" > /dev/null 2>&1; then
+            gh release upload "$GITHUB_REF_NAME" "$APK" "$APK.sha256" --clobber
+            gh release edit "$GITHUB_REF_NAME" --title "$TITLE" --notes-file "$NOTES"
+          else
+            gh release create "$GITHUB_REF_NAME" "$APK" "$APK.sha256" \
+              --title "$TITLE" --notes-file "$NOTES" --verify-tag
+          fi
 
       - name: Remove keystore
         if: always()
