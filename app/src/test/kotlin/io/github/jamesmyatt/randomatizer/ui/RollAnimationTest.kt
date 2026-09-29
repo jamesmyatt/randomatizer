@@ -3,6 +3,11 @@ package io.github.jamesmyatt.randomatizer.ui
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.test.SemanticsMatcher
+import androidx.compose.ui.test.assertCountEquals
+import androidx.compose.ui.test.getUnclippedBoundsInRoot
+import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import com.github.takahirom.roborazzi.RobolectricDeviceQualifiers
@@ -12,6 +17,7 @@ import io.github.jamesmyatt.randomatizer.dice.StandardDie
 import io.github.jamesmyatt.randomatizer.history.HistoryEntry
 import io.github.jamesmyatt.randomatizer.settings.AppSettings
 import io.github.jamesmyatt.randomatizer.settings.Mode
+import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -50,4 +56,29 @@ class RollAnimationTest {
         compose.mainClock.advanceTimeBy(500)
         compose.onNodeWithText("6 · 5 · 4").assertExists()
     }
+
+    @Test
+    fun totalIsHiddenDuringAnimationWithoutMovingLayout() {
+        val first = entry(1, 1, 2, 3)
+        val second = entry(2, 6, 5, 4)
+        val settings = AppSettings(mode = Mode.Basic, basicCount = 3, selectionExpanded = false)
+        var state by mutableStateOf(RollerUiState(settings, first, listOf(first)))
+        compose.setContent { RollerScreen(state, onRoll = {}, onClearHistory = {}, onUpdateSettings = {}) }
+        compose.waitForIdle()
+
+        compose.mainClock.autoAdvance = false
+        state = RollerUiState(settings, second, listOf(second, first))
+        compose.waitForIdle()
+        compose.mainClock.advanceTimeByFrame()
+        val labelBounds = compose.onNodeWithText("Total").getUnclippedBoundsInRoot()
+        // The final total is laid out but hidden, and no other total is shown.
+        compose.onNode(hasText("15") and isHidden, useUnmergedTree = true).assertExists()
+        compose.onAllNodes(hasText("15") and !isHidden, useUnmergedTree = true).assertCountEquals(0)
+
+        compose.mainClock.advanceTimeBy(500)
+        compose.onAllNodes(hasText("15") and isHidden, useUnmergedTree = true).assertCountEquals(0)
+        assertEquals(labelBounds, compose.onNodeWithText("Total").getUnclippedBoundsInRoot())
+    }
+
+    private val isHidden = SemanticsMatcher.keyIsDefined(SemanticsProperties.HideFromAccessibility)
 }
