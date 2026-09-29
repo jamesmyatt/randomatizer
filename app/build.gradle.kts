@@ -8,9 +8,11 @@ plugins {
 }
 
 val appVersionMajor = providers.gradleProperty("appVersionMajor").get().toInt()
+val appVersionMinor = providers.gradleProperty("appVersionMinor").get().toInt()
 val appVersionPatch = providers.gradleProperty("appVersionPatch").get().toInt()
 check(appVersionMajor >= 1) { "appVersionMajor must be at least 1" }
-check(appVersionPatch in 0..999) { "appVersionPatch must be in 0..999" }
+check(appVersionMinor in 0..99) { "appVersionMinor must be in 0..99" }
+check(appVersionPatch in 0..99) { "appVersionPatch must be in 0..99" }
 
 // Release signing comes from the environment (set by the release workflow). Without it, release APKs are unsigned.
 val releaseKeystore = providers.environmentVariable("RANDOMATIZER_KEYSTORE_FILE")
@@ -25,8 +27,8 @@ android {
         applicationId = "io.github.jamesmyatt.randomatizer"
         minSdk = 31
         targetSdk = 37
-        versionCode = appVersionMajor * 1000 + appVersionPatch
-        versionName = "$appVersionMajor.$appVersionPatch"
+        versionCode = appVersionMajor * 10000 + appVersionMinor * 100 + appVersionPatch
+        versionName = "$appVersionMajor.$appVersionMinor.$appVersionPatch"
     }
 
     signingConfigs {

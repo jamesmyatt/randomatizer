@@ -49,14 +49,14 @@ minSdk 31, targetSdk 37, compileSdk 37.2. AGP built-in Kotlin with the Compose c
 
 ## Versioning
 
-- `versionName` is `MAJOR.PATCH`, set in `gradle.properties` (`appVersionMajor`, `appVersionPatch`). `versionCode = MAJOR * 1000 + PATCH`.
-- Most code changes bump MAJOR and reset PATCH to 0. Bump PATCH only for small fixes, docs or build-only changes.
-- Bump the version at most once per branch/PR, relative to the base branch. If the branch already bumps it, don't bump again for further commits; just update that version's changelog (use a MAJOR bump if any change on the branch needs one).
+- Semantic versioning: `versionName` is `MAJOR.MINOR.PATCH`, set in `gradle.properties` (`appVersionMajor`, `appVersionMinor`, `appVersionPatch`). `versionCode = MAJOR * 10000 + MINOR * 100 + PATCH`, so MINOR and PATCH stay in 0..99.
+- Most code changes bump MAJOR and reset MINOR and PATCH to 0. Bump MINOR only for small additions or tweaks that don't change existing behavior (e.g. a new palette color, a new setting defaulting to current behavior), and PATCH only for small fixes, docs or build-only changes. Reset the lower parts to 0.
+- Bump the version at most once per branch/PR, relative to the base branch. If the branch already bumps it, don't bump again for further commits; just update that version's changelog (use the largest bump any change on the branch needs).
 - Every version bump adds `fastlane/metadata/android/en-US/changelogs/<versionCode>.txt`. These files are the only changelog: they feed GitHub Release notes and F-Droid. Don't add a separate `CHANGELOG.md`.
 
 ## Releases
 
-- Developer setup and phone testing are in `DEVELOPING.md`; maintainer release steps in `RELEASING.md`. The README is for users. Pushing tag `v<MAJOR>.<PATCH>` (with git, or by publishing a release on GitHub) runs `.github/workflows/release.yml`, which builds a signed APK and creates the GitHub Release, or attaches the APK to the one already published. The tag must match `gradle.properties` and the changelog must exist.
+- Developer setup and phone testing are in `DEVELOPING.md`; maintainer release steps in `RELEASING.md`. The README is for users. Pushing tag `v<MAJOR>.<MINOR>.<PATCH>` (with git, or by publishing a release on GitHub) runs `.github/workflows/release.yml`, which builds a signed APK and creates the GitHub Release, or attaches the APK to the one already published. The tag must match `gradle.properties` and the changelog must exist.
 - Release signing is read only from environment variables (`RANDOMATIZER_KEYSTORE_FILE`, `RANDOMATIZER_KEYSTORE_PASSWORD`, `RANDOMATIZER_KEY_ALIAS`, optional `RANDOMATIZER_KEY_PASSWORD` that defaults to the keystore password), fed from repository secrets. Never commit keystores, passwords or `.b64` files.
 - Don't push release tags unless asked.
 

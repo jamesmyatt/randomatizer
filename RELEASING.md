@@ -1,6 +1,6 @@
 # Releasing
 
-Releases are published to GitHub Releases by `.github/workflows/release.yml` when a `v<MAJOR>.<PATCH>` tag is pushed.
+Releases are published to GitHub Releases by `.github/workflows/release.yml` when a `v<MAJOR>.<MINOR>.<PATCH>` tag is pushed.
 
 ## One-time setup: signing key
 
@@ -70,9 +70,9 @@ Delete the `.b64` file. Back up the `.jks` file and both passwords, e.g. in a pa
 ## Each release
 
 1. Make sure `gradle.properties` has the right version and `fastlane/metadata/android/en-US/changelogs/<versionCode>.txt` exists. The changelog becomes the release notes.
-2. Create the tag `v<MAJOR>.<PATCH>` on `main`, either way:
-   - With git: `git tag v1.0 && git push origin v1.0`.
-   - On GitHub: Releases → **Draft a new release** → type `v1.0` under **Choose a tag** → **Create new tag on publish**, target `main` → **Publish release**. Leave the notes empty; the workflow replaces them with the changelog. A saved draft doesn't create the tag, so nothing runs until you publish.
+2. Create the tag `v<MAJOR>.<MINOR>.<PATCH>` on `main`, either way:
+   - With git: `git tag v1.0.0 && git push origin v1.0.0`.
+   - On GitHub: Releases → **Draft a new release** → type `v1.0.0` under **Choose a tag** → **Create new tag on publish**, target `main` → **Publish release**. Leave the notes empty; the workflow replaces them with the changelog. A saved draft doesn't create the tag, so nothing runs until you publish.
 
 The workflow fails if the tag doesn't match the version, the changelog is missing, a secret is missing, or the build, tests or lint fail. It attaches `randomatizer-<version>.apk` and its SHA-256 checksum to the release.
 
