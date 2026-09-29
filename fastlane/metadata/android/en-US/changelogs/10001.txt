@@ -1,0 +1,1 @@
+- The total stays blank while the dice roll and appears when they stop.

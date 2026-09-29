@@ -47,6 +47,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.Placeable
@@ -55,6 +56,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
@@ -138,7 +140,7 @@ fun RollerScreen(
                     SelectionPanel(settings, onUpdateSettings)
                     DiceArea(state.current?.mode, animated.results, style)
                     if (settings.showTotal) {
-                        Total(animated.results)
+                        Total(state.current?.roll?.total, hidden = animated.animating)
                     }
                     RollButton(settings, onRoll)
                 }
@@ -386,8 +388,12 @@ private fun DiceArea(mode: Mode?, results: List<DieResult>?, style: DieStyle) {
     }
 }
 
+/**
+ * While [hidden] (the roll is animating), the final total is laid out but not drawn or announced,
+ * so nothing moves when it appears.
+ */
 @Composable
-private fun Total(results: List<DieResult>?) {
+private fun Total(total: Int?, hidden: Boolean) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterHorizontally),
         modifier = Modifier.fillMaxWidth(),
@@ -399,12 +405,16 @@ private fun Total(results: List<DieResult>?) {
             modifier = Modifier.alignByBaseline(),
         )
         Text(
-            text = results?.sumOf { it.value }?.toString() ?: "–",
+            text = total?.toString() ?: "–",
             style = MaterialTheme.typography.displaySmall,
             fontWeight = FontWeight.SemiBold,
             modifier = Modifier
                 .alignByBaseline()
-                .semantics { liveRegion = LiveRegionMode.Polite },
+                .alpha(if (hidden) 0f else 1f)
+                .semantics {
+                    liveRegion = LiveRegionMode.Polite
+                    if (hidden) hideFromAccessibility()
+                },
         )
     }
 }
